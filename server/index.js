@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const routes = require("./routes/index");
+const blogRoutes = require("./routes/blogRoutes");
 //database
 
 const db = require("./config/db");
@@ -27,7 +27,7 @@ app.use((req,res, next) => {
 })
 //routes
 
- app.use("/", routes);
+app.use("/", blogRoutes);
 
 const PORT = process.env.PORT || 5000;
 
