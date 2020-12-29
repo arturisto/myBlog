@@ -1,0 +1,21 @@
+.welcomeMain{
+    width:100%;
+    background-image: url(../../../assets/images/homepage.jpg);
+    background-size:cover;
+    height:100%;
+    position:relative;
+}
+
+.welcomeText{
+
+    width:30vw;
+    height:70%;
+    background-color:white;
+    position:absolute;
+    margin-top:5%;
+    margin-left:55%;
+    border:1px solid black;
+    font-size:2em;
+    opacity:0.8;
+    
+}
