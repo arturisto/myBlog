@@ -5,13 +5,13 @@ const path = require('path');
 const blogRoutes = require("./routes/blogRoutes");
 //database
 
-const db = require("./config/db");
+// const db = require("./config/db");
 
 //testDB
 
-db.authenticate()
-    .then(() => console.log('database connected'))
-    .catch(err =>console.log("Error ",err))
+// db.authenticate()
+//     .then(() => console.log('database connected'))
+//     .catch(err =>console.log("Error ",err))
 
 //middleware
 

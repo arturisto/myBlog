@@ -15,13 +15,16 @@ async function getAll(){
 };  
 //get
 router.get("/", (req, res) => {
-    getAll();
+    // getAll();
 
     console.log("hiiis")
+    res.status(200).json({
+        status:"success"
+    })
 });
 //add ite
 
-router.get("/add", (req, res) => {
+router.post("/", (req, res) => {
     const data = {
         title: "hello",
         metatitle: "meta",
@@ -32,13 +35,13 @@ router.get("/add", (req, res) => {
 
     console.log("hi from the backend");
 
-    blogpost.create({
-        title,
-        metatitle,
-        content 
-    })
-        .then(test => res.redirect("/"))
-        .catch(err => console.log("error", err));
+    // blogpost.create({
+    //     title,
+    //     metatitle,
+    //     content 
+    // })
+    //     .then(test => res.redirect("/"))
+    //     .catch(err => console.log("error", err));
 
         res.status(200).json({
             status:"success"
