@@ -13,7 +13,7 @@ export default function NavigationBar() {
         return (
         
                 <Navbar className="navbar navbar-expand-lg navbar-light bg-light" sticky="top" fixed="top">
-                    <a className="navbar-brand" href="#">
+                    <a className="navbar-brand" href="/">
                         <img src={logo} width="60" height="40" alt="logo"></img>
                      </a>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,6 +45,9 @@ export default function NavigationBar() {
                                 </li>
                                 <li className="nav-item active">
                                     <a className="nav-link" href="#">בחו"ל <span className="sr-only">(current)</span></a>
+                                </li>
+                                <li className="nav-item active">
+                                    <a className="nav-link" href="/login"> <span className="loginLink">LogIn</span></a>
                                 </li>
 
                             </ul>

@@ -32,14 +32,14 @@ class BlogPage extends Component {
             <Navbar> </Navbar>
         
           
-            <Row fluid className="justify-content-md-center">
-                <Col lg = {2}>
+            <Row fluid className="ml-5">
+                {/* <Col lg = {3}>
                 <LeftSideBar text = {this.state.fillerText} />  
-                </Col>
+                </Col> */}
                 <Col lg = {8} >
                 <BlogPost text = {this.state.blogTest}></BlogPost>
                 </Col>
-                <Col lg = {2}>
+                <Col lg = {3}>
                     <RightSideBar  text = {this.state.fillerText}></RightSideBar>    
                 </Col>
             </Row> 

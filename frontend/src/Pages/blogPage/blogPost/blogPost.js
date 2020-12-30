@@ -1,7 +1,7 @@
 import React,{Fragment, Component} from "react"
 import "./blogPost.scss";
 import {placePictures} from "../../../assets/images/imageConstants";
-import test from "../../../actions/test_fe_be";
+// import test from "../../../actions/test_fe_be";
 
 
 
@@ -17,7 +17,7 @@ class BlogPost extends Component {
     
     return ( 
         <Fragment >
-            <div className="mt-3">
+            <div className="mt-3 ml-5 mr-5 ">
                 <h2><i>דוגמא לפוסט</i></h2>
                 <h2><i>האיטליה של ויוינו</i></h2>
 
@@ -56,10 +56,9 @@ class BlogPost extends Component {
                 <img className="postImg" src = {placePictures.vvno_rotelo} alt ="rotelo"></img>   
                 </div>  
              
-                
-
-                {this.props.text}
-                <button className="bt btn-primary" onClick={()=>{this.testit()}} >test</button>
+        
+                {/* {this.props.text} */}
+                {/* <button className="bt btn-primary" onClick={()=>{this.testit()}} >test</button> */}
             </div>
         </Fragment>
         )

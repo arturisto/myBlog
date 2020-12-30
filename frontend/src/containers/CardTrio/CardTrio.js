@@ -13,20 +13,20 @@ class CardTrio extends Component {
                         title = "hello there"
                         body= "this is my body"
                         img_src ={placePictures.dishoom} 
-                        blog_link = "blogpost/33" 
+                        blog_link = "blogpage/22" 
                             >
                     </Card>
                     <Card
                         title = "hello there"
                         body= "this is my body"
                         img_src ={placePictures.dishoom}
-                        blog_link = "blogpost/22"  >  
+                        blog_link = "blogpage/22"  >  
                     </Card>
                     <Card
                         title = "hello there"
                         body= "this is my body"
                         img_src ={placePictures.dishoom} 
-                        blog_link = "blogpost/32" >  
+                        blog_link = "blogpage/22" >  
                     </Card>
                  </div>  
             </Fragment>

@@ -1,12 +1,14 @@
 import {Component,Fragment} from "react"
-
+import "./leftSideBar.scss";
 class LeftSideBar extends Component {
     
     render (){
     
     return ( 
         <Fragment>
-            {this.props.text}
+            <div class = "leftSideBar">
+                {this.props.text}
+            </div>
        
         </Fragment>
         )

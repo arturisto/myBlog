@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router();
-const db = require("../config/db");
 const blogpost = require("../models/blogpost");
 
 async function getAll(){
@@ -14,14 +13,14 @@ async function getAll(){
 
 };  
 //get
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
     getAll();
 
     console.log("hiiis")
 });
 //add ite
 
-router.get("/add", (req, res) => {
+router.post("/add", (req, res) => {
     const data = {
         title: "hello",
         metatitle: "meta",
@@ -37,12 +36,12 @@ router.get("/add", (req, res) => {
         metatitle,
         content 
     })
-        .then(test => res.redirect("/"))
+        .then(test =>res.status(200).json({
+            status:"success"
+        }))
         .catch(err => console.log("error", err));
 
-        res.status(200).json({
-            status:"success"
-        })
+      
 
 });
 
