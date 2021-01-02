@@ -29,6 +29,7 @@ const publicRoutes = [
       exact: true,
       component: lazy(() => import('./Pages/cms/cms')),
     },
+
     // {
     //   path: PUBLIC_ROUTE.ABOUT,
     //   exact: true,
