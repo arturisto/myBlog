@@ -64,21 +64,21 @@ const getBlog = async ()=>{
 
 
 const uploadImageToBucket = async (image) => {
-    console.log("fff",image)
-
+    let image_location
+    const formData = new FormData();
+    formData.append('image',image)
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    }
     try {
-        // const url = "http://localhost:5000/user/blogmanage/uploadimage";
-        // await fetch (url, {
-        //     method:"POST",
-        //     headers:{ "Content-Type": "application/json"}
-        // }           
-        //     )
-        // .then(function (response){
-        //     console.log("hi",response.json())
-        // })
-        
-        axios.post("http://localhost:5000/user/blogmanage/uploadimage",image)
-        .then(res=> console.log(res))
+        const response = axios.post("http://localhost:5000/user/blogmanage/uploadimage",formData,config)
+     
+        image_location = response.then((response)=>response.data.imageUrl);
+        console.log("img loc", image_location)
+
+        return image_location;
     } catch (error) {
         
     }

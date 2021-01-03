@@ -1,4 +1,8 @@
-.quillContainer{
-    width:70%;
-    margin:auto;
+.container-row{
+    display:flex;
+    flex-direction:row;
+}
+.navPane{
+    display:flex;
+    flex-direction: column;
 }

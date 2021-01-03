@@ -1,13 +1,24 @@
 const express = require('express')
-const fs = require('fs');
 const router = express.Router();
 const User = require("../models/user");
 const Blogpost = require("../models/blogpost");
-const AWS = require('aws-sdk');
-require('dotenv').config();
+// const AWS = require('aws-sdk');
+
+const imageUpload = require('../utils/imageUploader')
+const singleUpload = imageUpload.single('image');
 
 
-
+router.post("/blogmanage/uploadimage", async (req,res)=>{
+     console.log("upload start")
+     singleUpload(req, res, function(err) {
+        if (err) {
+            console.log(err.message)
+          return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
+        }
+        console.log(req.file.location);
+        return res.json({'imageUrl': req.file.location});
+      });
+});
 
 router.post("/login" , async (req,res) => {
 
@@ -52,34 +63,4 @@ router.post("/blogmanage/getnewentry", async (req,res)=>{
     res.status(200).json({msg:"success", body:blogEntry});
 
 });
-
-router.post("/blogmanage/uploadimage", async (req,res)=>{
-    // console.log(req.body)
-    // const fileContent = fs.readFileSync(req.body);
-    const s3 = new AWS.S3({
-        accessKeyId: process.env["AWS_ACCESS_KEY_ID"],
-        secretAccessKey: process.env["AWS_SECRET_KEY"],
-        region: process.env['AWS_REGION']
-      });
-    const BUCKET_NAME = "mrandmrseatmedia";
-    var base64data = new Buffer.from( 'binary',req.body,);
-    const params = {
-        Bucket: BUCKET_NAME,
-        Key: "test/test.jpg",
-        Body: base64data
-    }
-    
-    s3.upload(params, function (err,data){
-        if (err){
-            console.log(err)
-        }
-        console.log(`File uploaded successfully. ${data.Location}`);
-
-    })
-   
-
-});
-
-
-
 module.exports = router;

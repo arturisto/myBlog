@@ -33,21 +33,20 @@ class Editor extends React.Component {
     input.click();
     input.onchange = async () => {
         const file = input.files[0];
-
+        console.log("file",file)
         // const formData = new FormData();
         // formData.append('image', file);
         // Save current cursor state
         const range = this.quill.getSelection(true);
 
         // Move cursor to right side of image (easier to continue typing)
-        // this.quill.setSelection(range.index + 1);
+        this.quill.setSelection(range.index + 1);
         const img = await uploadImageToBucket(file)  
-        // // // Remove placeholder image
-        // // this.quill.deleteText(range.index, 1);
-        // console.log("img",img)
+
+        console.log("img",img)
         // Insert uploaded image
         // this.quill.insertEmbed(range.index, 'image', res.body.image);
-        this.quill.insertEmbed(range.index, 'image',"https://media.wired.com/photos/5b8999943667562d3024c321/master/w_2560%2Cc_limit/trash2-01.jpg");
+        this.quill.insertEmbed(range.index, 'image',img);
 
     };
 }
@@ -56,7 +55,7 @@ class Editor extends React.Component {
   render() {
     return (
       <Fragment>
-        
+        {/* <img src="https://mrandmrseatmedia.s3.us-east-2.amazonaws.com/test/test.jpg" alt="hi"></img> */}
         <ReactQuill
           ref={el => {
             this.quill = el;
@@ -71,10 +70,6 @@ class Editor extends React.Component {
                     [{ size: [] }],
                     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
                     [{ list: 'ordered' }, { list: 'bullet' }],
-                    [{ align: '' }],
-                    [{ align: 'right' }],
-                    [{ align: 'center' }],
-                    [{ align: 'justify' }],
                     ['link', 'image', 'video'],
                     ['clean'],
                     ['code-block']
