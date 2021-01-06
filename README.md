@@ -31,3 +31,5 @@ Areas to build:
 Fixes required:
 
 Quill Editor - option to change RTL and LTR typing
+
+AWS - make the bucket private

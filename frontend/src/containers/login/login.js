@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./login.scss";
 
-import login from "../../actions/userActions"
+import {login} from "../../actions/userActions";
 
 export default function Login() {
   const [username, setUsername] = useState("");

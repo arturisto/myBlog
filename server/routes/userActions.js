@@ -3,21 +3,42 @@ const router = express.Router();
 const User = require("../models/user");
 const Blogpost = require("../models/blogpost");
 // const AWS = require('aws-sdk');
-
 const imageUpload = require('../utils/imageUploader')
 const singleUpload = imageUpload.single('image');
+const multer = require('multer');
+const url = require('url');
+const imageReplacer = require("../utils/blogImageReplacer")
 
+const uploadImage = require('../utils/saveImageLocaly')
 
 router.post("/blogmanage/uploadimage", async (req,res)=>{
-     console.log("upload start")
-     singleUpload(req, res, function(err) {
+  
+    const imgUpload = uploadImage.single("image")
+    
+    imgUpload(req, res, function(err) {
+    
         if (err) {
-            console.log(err.message)
+            // console.log(err.message)
           return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
         }
-        console.log(req.file.location);
-        return res.json({'imageUrl': req.file.location});
+
+        const httpPath = 'http://localhost:8000'
+        const newPath = req.file.path.replace("D:",httpPath)
+        const resp = res.json({'imageUrl': newPath})
+
+    
+        console.log("path",newPath)
+        return resp;
       });
+    
+    //  singleUpload(req, res, function(err) {
+    //     if (err) {
+    //         console.log(err.message)
+    //       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
+    //     }
+    //     console.log(req.file.location);
+    //     return res.json({'imageUrl': req.file.location});
+    //   });
 });
 
 router.post("/login" , async (req,res) => {
@@ -33,26 +54,31 @@ router.post("/login" , async (req,res) => {
 });
 
 router.post("/blogmanage/savenewentry", async (req,res)=>{
-    const data = {
-        title: "test",
-        metatitle: "meta",
-        content: req.body,
-    };
 
-    let {  title, metatitle, content } = data;
-    try {
-        Blogpost.create({
-            title,
-            metatitle,
-            content 
-        })
-            .then(() =>res.status(200).json({
-                status:"success"
-            }))
-            .catch(err => console.log("error", err));
-    } catch (error) {
+    const newEntry = await imageReplacer(req.body.newBlogEntry, req.body.title)
+
+    console.log("new entry",newEntry)
+
+    // const data = {
+    //     title: "test",
+    //     metatitle: "meta",
+    //     content: req.body,
+    // };
+
+    // let {  title, metatitle, content } = data;
+    // try {
+    //     Blogpost.create({
+    //         title,
+    //         metatitle,
+    //         content 
+    //     })
+    //         .then(() =>res.status(200).json({
+    //             status:"success"
+    //         }))
+    //         .catch(err => console.log("error", err));
+    // } catch (error) {
         
-    }
+    // }
 });
 
 router.post("/blogmanage/getnewentry", async (req,res)=>{

@@ -1,4 +1,5 @@
- import axios from "axios";   
+ import axios from "axios";  
+
  const login = async (username,password) => {
 
     console.log("user actions")
@@ -22,11 +23,14 @@
        
     }
 };
-const saveBlog = async (newEntry)=>{
+const saveBlog = async (newEntry, title)=>{
 
+    // console.log("save blog", newEntry, title)
+    // return "jo";
     try {
         const data = {
-           newBlogEntry: newEntry,  
+           newBlogEntry: newEntry,
+           title:title  
         };   
         const url = "http://localhost:5000/user/blogmanage/savenewentry";
         const response  =await fetch (url, {
@@ -63,22 +67,15 @@ const getBlog = async ()=>{
 }
 
 
-const uploadImageToBucket = async (image) => {
-    let image_location
-    const formData = new FormData();
-    formData.append('image',image)
+const uploadImageToServer = async (formData) => {
     const config = {
         headers: {
             'content-type': 'multipart/form-data'
         }
     }
     try {
-        const response = axios.post("http://localhost:5000/user/blogmanage/uploadimage",formData,config)
-     
-        image_location = response.then((response)=>response.data.imageUrl);
-        console.log("img loc", image_location)
-
-        return image_location;
+         return axios.post("http://localhost:5000/user/blogmanage/uploadimage",formData,config)
+         .then(res=>res.data.imageUrl)
     } catch (error) {
         
     }
@@ -86,4 +83,4 @@ const uploadImageToBucket = async (image) => {
 
 }
 
-export default (login, saveBlog, getBlog, uploadImageToBucket)
+export {login, saveBlog, getBlog, uploadImageToServer}
