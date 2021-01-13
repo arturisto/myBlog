@@ -28,8 +28,19 @@ Areas to build:
 
 
 
-Fixes required:
+## **Fixes required:**
+
+**Quill**
 
 Quill Editor - option to change RTL and LTR typing
 
-AWS - make the bucket private
+**AWS fixes**
+
+1. AWS - make the bucket private
+
+2. Image Upload - Upon fail make another 2-3 attempts of uploading
+
+   1. Check error types for different responses
+
+   2. image upload failed, show error in a console on user screen
+

@@ -3,11 +3,8 @@ const router = express.Router();
 const User = require("../models/user");
 const Blogpost = require("../models/blogpost");
 // const AWS = require('aws-sdk');
-const imageUpload = require('../utils/imageUploader')
-const singleUpload = imageUpload.single('image');
-const multer = require('multer');
-const url = require('url');
-const imageReplacer = require("../utils/blogImageReplacer")
+const blogImageReplacer = require('../utils/blogImageReplacer')
+const imageUploader = require("../utils/imageUploader")
 
 const uploadImage = require('../utils/saveImageLocaly')
 
@@ -55,9 +52,23 @@ router.post("/login" , async (req,res) => {
 
 router.post("/blogmanage/savenewentry", async (req,res)=>{
 
-    const newEntry = await imageReplacer(req.body.newBlogEntry, req.body.title)
+    try{
 
-    console.log("new entry",newEntry)
+        const uplaodedImagesUrls = await imageUploader(req.body.title)
+        console.log("old entry",req.body.newBlogEntry)
+        let newEntry =blogImageReplacer( req.body.newBlogEntry,uplaodedImagesUrls)
+        console.log("new entry",newEntry)
+
+        }
+
+    
+    catch (error){
+        console.log("outside error", error)
+    }
+
+
+
+    // console.log("new entry",newEntry)
 
     // const data = {
     //     title: "test",
