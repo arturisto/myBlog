@@ -1,103 +1,106 @@
-const express = require('express')
+const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const Blogpost = require("../models/blogpost");
-// const AWS = require('aws-sdk');
-const blogImageReplacer = require('../utils/blogImageReplacer')
-const imageUploader = require("../utils/imageUploader")
+const imageUploader = require("../utils/imageUploader");
+const uploadImage = require("../utils/saveImageLocaly");
+const fs = require("fs");
 
-const uploadImage = require('../utils/saveImageLocaly')
+const path = require("path");
 
-router.post("/blogmanage/uploadimage", async (req,res)=>{
-  
-    const imgUpload = uploadImage.single("image")
-    
-    imgUpload(req, res, function(err) {
-    
-        if (err) {
-            // console.log(err.message)
-          return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
-        }
-
-        const httpPath = 'http://localhost:8000'
-        const newPath = req.file.path.replace("D:",httpPath)
-        const resp = res.json({'imageUrl': newPath})
-
-    
-        console.log("path",newPath)
-        return resp;
+router.post("/blogmanage/uploadimage", async (req, res) => {
+  const imgUpload = uploadImage.single("image");
+  imgUpload(req, res, function (err) {
+    if (err) {
+      // console.log(err.message)
+      return res.status(422).send({
+        errors: [{ title: "Image Upload Error", detail: err.message }],
       });
-    
-    //  singleUpload(req, res, function(err) {
-    //     if (err) {
-    //         console.log(err.message)
-    //       return res.status(422).send({errors: [{title: 'Image Upload Error', detail: err.message}]});
-    //     }
-    //     console.log(req.file.location);
-    //     return res.json({'imageUrl': req.file.location});
-    //   });
+    }
+    const httpPath = "http://localhost:8000";
+    const newPath = req.file.path.replace("D:", httpPath);
+    const resp = res.json({ imageUrl: newPath });
+    console.log("path", newPath);
+    return resp;
+  });
 });
 
-router.post("/login" , async (req,res) => {
-
-    try{
-            const user = await User.findOne({ where: { username: req.body.username, password: req.body.password } })
-            console.log(user)
-            return res.status(200).json({msg:"success"});
-        }
-        catch{
-            res.status(404).json({msg:"user not found"});
-        }
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: { username: req.body.username, password: req.body.password },
+    });
+    console.log(user);
+    return res.status(200).json({ msg: "success" });
+  } catch {
+    res.status(404).json({ msg: "user not found" });
+  }
 });
 
-router.post("/blogmanage/savenewentry", async (req,res)=>{
+router.post("/blogmanage/savenewentry", async (req, res) => {
+  const blogTitle = req.body.title;
+  let newEntry = req.body.newBlogEntry;
 
-    try{
+  try {
+    const uplaodedImagesUrls = await imageUploader(blogTitle);
+    uplaodedImagesUrls.forEach((image) => {
+      if (image.status === "rejected") {
+        //if one item is erroneous fail the entire proccss and return the error
+        const reason = image.reason.code;
+        const statusCode = image.reason.statusCode;
+        return res.status(statusCode).json({ msg: reason });
+      }
+    });
 
-        const uplaodedImagesUrls = await imageUploader(req.body.title)
-        console.log("old entry",req.body.newBlogEntry)
-        let newEntry =blogImageReplacer( req.body.newBlogEntry,uplaodedImagesUrls)
-        console.log("new entry",newEntry)
+    //replace old URLs for new ones
+    uplaodedImagesUrls.forEach((urlItem) => {
+      const oldUrl = urlItem.value[0];
+      const newUrl = urlItem.value[1];
+      newEntry = newEntry.replace(oldUrl, newUrl);
+    });
 
-        }
-
-    
-    catch (error){
-        console.log("outside error", error)
+    //save blogPost to DB
+    const data = {
+      title: blogTitle,
+      metatitle: "meta",
+      content: newEntry,
+      createdAt: new Date(),
+    };
+    const { title, metatitle, content, createdAt } = data;
+    try {
+      Blogpost.create({
+        title,
+        metatitle,
+        content,
+        createdAt,
+      }).then(() => {});
+    } catch (error) {
+      console.log(error);
+      return res.status(404).json({ msg: error });
     }
 
+    //clear temp folder
+    const relativePath = "./utils/temp";
+    const absolutePath = path.resolve(relativePath);
 
+    const files = fs.readdirSync(absolutePath);
+    files.forEach((file) => {
+      const fileToUnlink = path.join(absolutePath, file);
+      fs.unlink(fileToUnlink, (err) => {
+        if (err) throw err;
+      });
+    });
 
-    // console.log("new entry",newEntry)
-
-    // const data = {
-    //     title: "test",
-    //     metatitle: "meta",
-    //     content: req.body,
-    // };
-
-    // let {  title, metatitle, content } = data;
-    // try {
-    //     Blogpost.create({
-    //         title,
-    //         metatitle,
-    //         content 
-    //     })
-    //         .then(() =>res.status(200).json({
-    //             status:"success"
-    //         }))
-    //         .catch(err => console.log("error", err));
-    // } catch (error) {
-        
-    // }
+    return res.status(200).json({ msg: "ok" });
+  } catch (error) {
+    res.status(404).json({ msg: error });
+    console.log("error", error);
+  }
 });
 
-router.post("/blogmanage/getnewentry", async (req,res)=>{
-
-    console.log("hi from backend")
-    const blogEntry = await Blogpost.findOne({ where: { id :"10018" } })
-    console.log(blogEntry.content)
-    res.status(200).json({msg:"success", body:blogEntry});
-
+router.post("/blogmanage/getnewentry", async (req, res) => {
+  console.log("hi from backend");
+  const blogEntry = await Blogpost.findOne({ where: { id: "10020" } });
+  res.status(200).json({ msg: "success", body: blogEntry });
 });
 module.exports = router;

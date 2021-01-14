@@ -52,14 +52,14 @@ const getBlog = async ()=>{
 
     try {
         const url = "http://localhost:5000/user/blogmanage/getnewentry";
-        await fetch (url, {
+        const result = await fetch (url, {
             method:"POST",
             headers:{ "Content-Type": "application/json"}
         }           
             )
-        .then(function (response){
-            console.log("hi",response.json())
-        })    
+        const returnData =  await result.json();
+        return returnData
+  
     } catch (error) {
         
     }
@@ -68,11 +68,12 @@ const getBlog = async ()=>{
 
 
 const uploadImageToServer = async (formData) => {
+    
     const config = {
         headers: {
             'content-type': 'multipart/form-data'
         }
-    }
+    };
     try {
          return axios.post("http://localhost:5000/user/blogmanage/uploadimage",formData,config)
          .then(res=>res.data.imageUrl)
