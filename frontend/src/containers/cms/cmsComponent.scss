@@ -5,4 +5,16 @@
 .navPane{
     display:flex;
     flex-direction: column;
+    padding-left:1rem;
+    padding-right:1rem;
+    background-color: ghostwhite;
+    border:1px solid lightgrey;
+    height:100%;
+    
+}
+.navPane button{
+    margin-top:15px;
+}
+.tabPane{
+    width:100%;
 }

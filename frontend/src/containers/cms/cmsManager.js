@@ -1,82 +1,116 @@
-import React, { Fragment,Component } from "react";
-import "./cmsComponent.scss";
+import React, { Fragment, Component } from "react";
+//containers
 import CreatePost from "./createPost";
+import ViewPosts from "./viewPosts";
+//components
+import CmsMainScreenToolBar from "../../components/cmsManagerNav/cmsMainScreenToolBar";
 
-
+//boostrap items
+import Button from "react-bootstrap/Button";
+//styles
+import "./cmsComponent.scss";
+//actions
+import { getBlogPostHeaders,saveBlog } from "../../actions/userActions";
 
 class CmsManager extends Component {
-    constructor(props) {
-        super(props);
-    
-        this.toggleView = this.toggleView.bind(this);
-        this.state = {
-          activeTab: 'create'
-        };
-      }
-    toggleView(pane){
-        this.setState({
-            activeTab:pane
-        })
-    }   
-    render (){  
-    return ( 
-        <Fragment>
+  constructor(props) {
+    super(props);
+    //state
+    this.state = {
+      activeTab: "create",
+      postsToShow: [],
+      modalError: false,
+      errorText: "",
+      editor: "",
+      postTitle: "",
+    };
+    //binds
+    this.toggleView = this.toggleView.bind(this);
+    this.handleSaveEditorToState = this.handleSaveEditorToState.bind(this);
+    this.handleSaveEditor = this.handleSaveEditor.bind(this);
+    this.handleSaveTitleToState = this.handleSaveTitleToState.bind(this);
+  }
 
-            <div className="container-row">
-                <div className="navPane">
-                    <div><button onClick={()=> {this.toggleView("create")}}>Create</button></div>
-                    <div><button onClick={()=> {this.toggleView("display")}}>Display</button></div>
-                </div>
-                <div className = "tabPane">
-                    {this.state.activeTab ==="create"? (
-                        <div className="createEntry" id="createEntry" >
-                            <CreatePost></CreatePost>
-                        </div>):
-                        (<div className="showEntires" id = "showEntires"> Test</div>)
-                    }
-                </div>
-
-
-            </div>
-
-                {/* <Tab.Container  id="left-tabs-example" defaultActiveKey="first"  >
-                    <Row className="mt-15px">
-                        <Col sm={2} xl={2}>
-                        <Nav variant="pills" className="flex-column">
-                            <Nav.Item>
-                            <Nav.Link eventKey="create" >Create Entry</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                            <Nav.Link eventKey="view">View Entries</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                        </Col>
-                        <Col sm={10}  xl={10}>
-                        <Tab.Content>
-                            <Tab.Pane eventKey="create">
-                            <CreatePost></CreatePost>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="view">
-                                test
-                            </Tab.Pane>
-                        </Tab.Content>
-                        </Col>
-                    </Row>
-                </Tab.Container> */}
-
-             
-        </Fragment>
-        )
-            
+  async toggleView(pane) {
+    const headers = await getBlogPostHeaders();
+    if (headers.error === "error") {
+      this.setState({
+        activeTab: pane,
+        modalError: true,
+        errorText: headers.errorText,
+      });
+    } else {
+      this.setState({
+        activeTab: pane,
+        postsToShow: headers.body,
+      });
     }
-}   
+  }
+
+  handleSaveTitleToState(title) {
+    this.setState({
+        postTitle: title,
+    });
+  }
+  handleSaveEditorToState(value) {
+    this.setState({
+      editor: value,
+    });
+  }
+
+  handleSaveEditor() {
+    saveBlog(this.state.editor, this.state.postTitle)
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <div className="container-row">
+          <div className="navPane">
+            <Button
+              className="nav-pane-btn"
+              variant="secondary"
+              onClick={() => {
+                this.toggleView("create");
+              }}
+            >
+              Create
+            </Button>
+
+            <Button
+              className="nav-pane-btn"
+              variant="secondary"
+              onClick={() => {
+                this.toggleView("display");
+              }}
+            >
+              Display
+            </Button>
+          </div>
+          <div className="tabPane">
+            <CmsMainScreenToolBar
+              option={this.state.activeTab}
+              onSaveEditor={() => this.handleSaveEditor()}
+            ></CmsMainScreenToolBar>
+            {this.state.activeTab === "create" ? (
+              <div className="createEntry" id="createEntry">
+                <CreatePost
+                  onChangeEditor={(value) =>
+                    this.handleSaveEditorToState(value)
+                  }
+                  onChangeTitle={(value)=>this.handleSaveTitleToState(value)}
+                  title={this.state.postTitle}
+                ></CreatePost>
+              </div>
+            ) : (
+              <div className="showEntires" id="showEntires">
+                <ViewPosts postHeaders={this.state.postsToShow}></ViewPosts>
+              </div>
+            )}
+          </div>
+        </div>
+      </Fragment>
+    );
+  }
+}
 export default CmsManager;
-
-// export default function cmsManager (){
-
-
-
-//     return(
-//         <div>hi</div>
-//     )
-// }

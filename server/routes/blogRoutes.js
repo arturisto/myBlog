@@ -15,8 +15,6 @@ async function getAll(){
 //get
 router.post("/", (req, res) => {
     getAll();
-
-    console.log("hiiis")
 });
 //add ite
 
@@ -27,10 +25,7 @@ router.post("/add", (req, res) => {
         content: "hello there all!",
     };
 
-    let { id, title, metatitle, content } = data;
-
-    console.log("hi from the backend");
-
+    let {title, metatitle, content } = data;
     blogpost.create({
         title,
         metatitle,

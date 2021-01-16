@@ -12,7 +12,7 @@ class Cms extends Component {
     return ( 
         <Fragment>
             <Navbar></Navbar>
-            
+        
             <CmsManager></CmsManager>
         </Fragment>
         )

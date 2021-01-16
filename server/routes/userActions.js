@@ -99,8 +99,21 @@ router.post("/blogmanage/savenewentry", async (req, res) => {
 });
 
 router.post("/blogmanage/getnewentry", async (req, res) => {
-  console.log("hi from backend");
   const blogEntry = await Blogpost.findOne({ where: { id: "10020" } });
   res.status(200).json({ msg: "success", body: blogEntry });
 });
+
+
+router.get("/blogmanage/getAllPosts", async (req,res)=>{
+  try{
+
+    const allEntries = await Blogpost.findAll();
+    res.status(200).json({ msg: "success", body: allEntries });
+  }
+  catch (error){
+    res.status(400).json({ msg: error});
+  };
+ 
+
+})
 module.exports = router;
