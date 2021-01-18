@@ -9,26 +9,33 @@ import Button from "react-bootstrap/Button";
 export default function cmsToolBar(props) {
   const activePane = props.option;
   const createButtonsOptions = [
-    { size: "sm", name: "Save", onclick:props.onSaveEditor},
-    { size: "sm", name: "Preview", onclick:props.onSaveEditor},
-    { size: "sm", name: "Clear Editor", onclick:props.onSaveEditor},
+    { size: "sm", name: "Save", onclick: props.onSaveEditor },
+    { size: "sm", name: "Preview", onclick: props.onPreviewEditor },
+    { size: "sm", name: "Clear Editor", onclick: props.onClearEditor },
   ];
 
   const displayButtonsOptions = [
-    { size: "sm", name: "Publish" },
-    { size: "sm", name: "Edit" },
-    { size: "sm", name: "Delete" },
-    { size: "sm", name: "See All" },
-    { size: "sm", name: "See Drafts" },
-    { size: "sm", name: "See Published" },
+    { size: "sm", name: "See All", onclick: props.onSeeAll },
+    { size: "sm", name: "See Drafts", onclick: props.onSeeDrafts },
+    { size: "sm", name: "See Published", onclick: props.onSeePublished },
+    { size: "sm", name: "Publish", onclick: props.onPublish },
+    { size: "sm", name: "Edit", onclick: props.onEdit },
+    { size: "sm", name: "Delete", onclick: props.onDelete },
+    { size: "sm", name: "Unpublish", onclick: props.onUnPublish },
   ];
+
   return (
     <div className="toolbarWrapper">
       {activePane === "create" ? (
         <>
           {createButtonsOptions.map(function (item, i) {
             return (
-              <Button key={"btn" + item.name} size={item.size} className="m-1" onClick={() => item.onclick()}>
+              <Button
+                key={"btn" + item.name}
+                size={item.size}
+                className="m-1"
+                onClick={() => item.onclick()}
+              >
                 {item.name}
               </Button>
             );
@@ -38,7 +45,12 @@ export default function cmsToolBar(props) {
         <>
           {displayButtonsOptions.map(function (item, i) {
             return (
-              <Button key={"btn" + item.name} size={item.size} className="m-1">
+              <Button
+                key={"btn" + item.name}
+                size={item.size}
+                className="m-1"
+                onClick={() => item.onclick()}
+              >
                 {item.name}
               </Button>
             );

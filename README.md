@@ -32,7 +32,8 @@ Areas to build:
 
 **Quill**
 
-Quill Editor - option to change RTL and LTR typing
+1. Quill Editor - option to change RTL and LTR typing
+2. Clear editor sends request to server to clear the temp image upload folder
 
 **AWS fixes**
 

@@ -12,7 +12,6 @@ router.post("/blogmanage/uploadimage", async (req, res) => {
   const imgUpload = uploadImage.single("image");
   imgUpload(req, res, function (err) {
     if (err) {
-      // console.log(err.message)
       return res.status(422).send({
         errors: [{ title: "Image Upload Error", detail: err.message }],
       });
@@ -20,7 +19,6 @@ router.post("/blogmanage/uploadimage", async (req, res) => {
     const httpPath = "http://localhost:8000";
     const newPath = req.file.path.replace("D:", httpPath);
     const resp = res.json({ imageUrl: newPath });
-    console.log("path", newPath);
     return resp;
   });
 });
@@ -98,22 +96,67 @@ router.post("/blogmanage/savenewentry", async (req, res) => {
   }
 });
 
-router.post("/blogmanage/getnewentry", async (req, res) => {
-  const blogEntry = await Blogpost.findOne({ where: { id: "10020" } });
-  res.status(200).json({ msg: "success", body: blogEntry });
+router.post("/blogmanage/updateentry", async (req, res) => {
+  const blogId = req.body.id;
+  const entryToUpdate = req.body.entryToUpdate;
+  const title = req.body.title;
+
+  try {
+    await Blogpost.update(
+      { title: title, content: entryToUpdate },
+      { where: { id: blogId } }
+    );
+
+    res.status(200).json({ msg: "success" });
+  } catch (error) {
+    console.log(error);
+  }
+});
+router.get("/blogmanage/getnewentry", async (req, res) => {
+  try {
+    const blogId = req.query.blogId;
+    const blogEntry = await Blogpost.findOne({ where: { id: blogId } });
+    res.status(200).json({ msg: "success", body: blogEntry });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
-
-router.get("/blogmanage/getAllPosts", async (req,res)=>{
-  try{
-
+router.get("/blogmanage/getAllPosts", async (req, res) => {
+  try {
     const allEntries = await Blogpost.findAll();
     res.status(200).json({ msg: "success", body: allEntries });
+  } catch (error) {
+    res.status(400).json({ msg: error });
   }
-  catch (error){
-    res.status(400).json({ msg: error});
-  };
- 
+});
 
-})
+router.post("/blogmanage/deleteEntries", async (req, res) => {
+  try {
+    await Blogpost.destroy({ where: { id: req.body } });
+    res.status(200).json({ msg: "success" });
+  } catch (error) {
+    res.status(404).json({ msg: error });
+  }
+});
+
+router.post("/blogmanage/publishEntries", async (req, res) => {
+  try {
+    await Blogpost.update({ published: true }, { where: { id: req.body } });
+    res.status(200).json({ msg: "success" });
+  } catch (error) {
+    res.status(404).json({ msg: error });
+  }
+});
+
+router.post("/blogmanage/unPublishEntries", async (req, res) => {
+  try {
+    await Blogpost.update({ published: false }, { where: { id: req.body } });
+
+    res.status(200).json({ msg: "success" });
+  } catch (error) {
+    console.log("error");
+    res.status(404).json({ msg: error });
+  }
+});
 module.exports = router;

@@ -4,13 +4,14 @@ import Editor from "../../components/editor/editor";
 import { saveBlog, uploadImageToServer } from "../../actions/userActions";
 
 export default function CreatePost(props) {
-  const getHtmlValue = (htmlValue) => {
-    props.onChangeEditor(htmlValue);
+  const getHtmlValue = (htmlValue, clearValue) => {
+    props.onChangeEditor(htmlValue, clearValue);
   };
   const handleTitle = (event) => {
     props.onChangeTitle(event.target.value);
   };
 
+  const editorValue = props.editorValue
   const imageHandler = (quill) => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
@@ -50,8 +51,12 @@ export default function CreatePost(props) {
         <strong>Blog:</strong>
       </span>
       <Editor
-        onChangeEditor={(htmlValue) => getHtmlValue(htmlValue)}
+        onChangeEditor={(htmlValue, clearValue) =>
+          getHtmlValue(htmlValue, clearValue)
+        }
         onInsertImage={(quill) => imageHandler(quill)}
+        isEditorToClear={props.isEditorToClear}
+        editorValue = {editorValue}
       />
     </div>
   );

@@ -36,8 +36,6 @@ router.post("/add", (req, res) => {
         }))
         .catch(err => console.log("error", err));
 
-      
-
 });
 
 
