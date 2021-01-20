@@ -2,7 +2,7 @@
     display:flex;
     flex-direction:row;
 }
-.navPane{
+.nav-pane{
     display:flex;
     flex-direction: column;
     padding-left:1rem;
@@ -12,9 +12,12 @@
     height:100%;
     
 }
-.navPane button{
+.nav-pane button{
     margin-top:15px;
 }
-.tabPane{
+.tab-pane{
     width:100%;
+}
+.tags-wrapper{
+    
 }

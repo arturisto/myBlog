@@ -2,11 +2,13 @@ import React, { Fragment, Component } from "react";
 //containers
 import CreatePost from "./createPost";
 import ViewPosts from "./viewPosts";
+import Preview from "./preview";
 //components
 import CmsMainScreenToolBar from "../../components/cmsManagerNav/cmsMainScreenToolBar";
+import Modal from "../../components/modals/Modal";
 //boostrap items
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+
 //styles
 import "./cmsComponent.scss";
 //actions
@@ -20,18 +22,15 @@ import {
   updateBlog,
 } from "../../actions/userActions";
 //utilites
-import { CMSVIEWMODES } from "../../utils/enums";
+import { CMSVIEWMODES, CMSTABS } from "../../utils/enums";
 
 class CmsManager extends Component {
   constructor(props) {
     super(props);
     //state
     this.state = {
-      activeTab: "create",
+      activeTab: CMSTABS.CREATE,
       postsToShow: [],
-      modalStatus: false,
-      modalTitle: "",
-      modalText: "",
       editor: "",
       postTitle: "",
       editorToClear: false,
@@ -39,6 +38,10 @@ class CmsManager extends Component {
       viewMode: CMSVIEWMODES.ALL,
       isEdit: false,
       entryEditId: "",
+      modalStatus: false,
+      modalType: "",
+      modalTitle: "",
+      modalText: "",
     };
     //binds
     this.toggleView = this.toggleView.bind(this);
@@ -59,6 +62,12 @@ class CmsManager extends Component {
     this.handleSeePublished = this.handleSeePublished.bind(this);
     this.handleUnPublish = this.handleUnPublish.bind(this);
     this.handleCheckbox = this.handleCheckbox.bind(this);
+    //modal binds
+    this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleDeny = this.handleDeny.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    //refs
+    this.tagsInput = React.createRef();
   }
 
   async toggleView(pane) {
@@ -66,8 +75,8 @@ class CmsManager extends Component {
     if (headers.error === "error") {
       this.setState({
         activeTab: pane,
-        modalError: true,
-        errorText: headers.errorText,
+        modalStatus: true,
+        modalText: headers.errorText,
       });
     } else {
       this.setState({
@@ -94,15 +103,24 @@ class CmsManager extends Component {
   }
 
   async handleSaveEditor() {
+    const tags = this.tagsInput.current.value;
+    const arrayTags = tags.split(",").map(function (tag) {
+      return tag.trim();
+    });
     let response;
     if (this.state.isEdit) {
       response = await updateBlog(
         this.state.editor,
         this.state.postTitle,
-        this.state.entryEditId
+        this.state.entryEditId,
+        arrayTags
       );
     } else {
-      response = await saveBlog(this.state.editor, this.state.postTitle);
+      response = await saveBlog(
+        this.state.editor,
+        this.state.postTitle,
+        arrayTags
+      );
     }
 
     if (response === true) {
@@ -124,12 +142,19 @@ class CmsManager extends Component {
     }
   }
   handleClearEditor() {
+    this.tagsInput.current.value = "";
     this.setState({
       editorToClear: true,
     });
   }
   handlePreviewEditor() {
-    console.log("preview Editor");
+    console.log(this.state.activeTab);
+    this.setState({
+      activeTab:
+        this.state.activeTab === CMSTABS.CREATE
+          ? CMSTABS.PREVIEW
+          : CMSTABS.CREATE,
+    });
   }
 
   async handlePublish() {
@@ -141,6 +166,7 @@ class CmsManager extends Component {
         modalStatus: true,
         modalTitle: "Error",
         modalText: "Something went Wrong",
+        modalType: "error",
         checkedItems: [],
       });
     }
@@ -155,6 +181,7 @@ class CmsManager extends Component {
         modalStatus: true,
         modalTitle: "Error",
         modalText: "Something went Wrong",
+        modalType: "error",
         checkedItems: [],
       });
     }
@@ -167,12 +194,14 @@ class CmsManager extends Component {
         modaStatus: true,
         modalTitle: "Wrong Selection",
         modalText: "Please choose one item",
+        modalType: "error",
       });
     } else if (length > 1) {
       this.setState({
         modaStatus: true,
         modalTitle: "Wrong Selection",
         modalText: "Please choose only one item",
+        modalType: "error",
       });
     } else {
       const reply = await getSingleBlogEntry(id);
@@ -180,30 +209,59 @@ class CmsManager extends Component {
         this.setState({
           postTitle: reply.body.title,
           editor: reply.body.content,
-          activeTab: "create",
+          activeTab: CMSTABS.CREATE,
           isEdit: true,
           entryEditId: id,
         });
+        // if (reply.body.tags) {
+        //   const tagsToDisplay = reply.body.tags.join(", ");
+        //   this.tagsInput.current.value = tagsToDisplay;
+        // }
       } else {
         this.setState({
           modalStatus: true,
           modalTitle: "Error",
           modalText: reply,
+          modalType: "error",
         });
       }
     }
   }
-  async handleDelete() {
+  handleDelete() {
+    this.setState({
+      modalStatus: true,
+      modalType: "delete",
+      modalTitle: "Confirm Deletion",
+      modalText: "Are you sure you want to delete?",
+    });
+  }
+  handleConfirm(type) {
+    switch (type) {
+      case "delete":
+        this.performDelete();
+        break;
+      default:
+        this.handleDeny();
+        break;
+    }
+  }
+  async performDelete() {
     const reply = await deleteEntries(this.state.checkedItems);
     if (reply) {
+      this.closeModal();
       this.handleListDataRender();
     } else {
       this.setState({
-        modalError: true,
+        modalStatus: true,
+        modalType: "error",
+        modalTitle: "error",
         checkedItems: [],
-        errorText: "Something went Wrong",
+        modalText: "Something went Wrong",
       });
     }
+  }
+  handleDeny() {
+    this.closeModal();
   }
   handleSeeAll() {
     this.setState({
@@ -239,9 +297,9 @@ class CmsManager extends Component {
     const headers = await getBlogPostHeaders();
     if (headers.error === "error") {
       this.setState({
-        modalError: true,
+        modalStatus: true,
         checkedItems: [],
-        errorText: headers.errorText,
+        modalText: headers.errorText,
       });
     } else {
       this.setState({
@@ -251,31 +309,32 @@ class CmsManager extends Component {
     }
   }
 
+  closeModal() {
+    this.setState({
+      modalStatus: false,
+      modalType: "",
+      modalTitle: "",
+      modalText: "",
+    });
+  }
   render() {
     return (
       <Fragment>
-        <Modal show={this.state.modalStatus}>
-          <Modal.Header closeButton>
-            <Modal.Title>{this.state.modalTitle}</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <p>{this.state.modalText}</p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleCloseModal}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Modal
+          showStatus={this.state.modalStatus}
+          modalTitle={this.state.modalTitle}
+          modalText={this.state.modalText}
+          modalType={this.state.modalType}
+          onConfirm={(type) => this.handleConfirm(type)}
+          onDeny={() => this.handleDeny()}
+        ></Modal>
         <div className="container-row">
-          <div className="navPane">
+          <div className="nav-pane">
             <Button
               className="nav-pane-btn"
               variant="secondary"
               onClick={() => {
-                this.toggleView("create");
+                this.toggleView(CMSTABS.CREATE);
               }}
             >
               Create
@@ -285,13 +344,13 @@ class CmsManager extends Component {
               className="nav-pane-btn"
               variant="secondary"
               onClick={() => {
-                this.toggleView("display");
+                this.toggleView(CMSTABS.DISPLAY);
               }}
             >
               Display
             </Button>
           </div>
-          <div className="tabPane">
+          <div className="tab-pane">
             <CmsMainScreenToolBar
               option={this.state.activeTab}
               onSaveEditor={() => this.handleSaveEditor()}
@@ -305,8 +364,9 @@ class CmsManager extends Component {
               onSeeDrafts={() => this.handleSeeDrafts()}
               onSeePublished={() => this.handleSeePublished()}
             ></CmsMainScreenToolBar>
-            {this.state.activeTab === "create" ? (
-              <div className="createEntry" id="createEntry">
+
+            {this.state.activeTab === CMSTABS.CREATE ? (
+              <div id={CMSTABS.CREATE}>
                 <CreatePost
                   onChangeEditor={(value) =>
                     this.handleSaveEditorToState(value)
@@ -316,9 +376,25 @@ class CmsManager extends Component {
                   isEditorToClear={this.state.editorToClear}
                   editorValue={this.state.editor}
                 ></CreatePost>
+                <div className="tags-wrapper m-auto p-3 w-75">
+                  <label htmlFor="tags" className="mr-3">
+                    <strong>Tags:</strong>
+                  </label>
+                  <input
+                    ref={this.tagsInput}
+                    type="text"
+                    key="tags"
+                    id="tags"
+                    className="w-100"
+                  ></input>
+                </div>
               </div>
             ) : (
-              <div className="showEntires" id="showEntires">
+              ""
+            )}
+
+            {this.state.activeTab === CMSTABS.DISPLAY ? (
+              <div id={CMSTABS.DISPLAY}>
                 <ViewPosts
                   postHeaders={this.state.postsToShow}
                   viewMode={this.state.viewMode}
@@ -334,6 +410,16 @@ class CmsManager extends Component {
                   checkedItems={this.state.checkedItems}
                 ></ViewPosts>
               </div>
+            ) : (
+              ""
+            )}
+            {this.state.activeTab === CMSTABS.PREVIEW ? (
+              <Preview
+                blogData={this.state.editor}
+                blogTitle={this.state.postTitle}
+              ></Preview>
+            ) : (
+              ""
             )}
           </div>
         </div>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./cmsComponent.scss";
 import Editor from "../../components/editor/editor";
-import { saveBlog, uploadImageToServer } from "../../actions/userActions";
+import { uploadImageToServer } from "../../actions/userActions";
+
 
 export default function CreatePost(props) {
   const getHtmlValue = (htmlValue, clearValue) => {

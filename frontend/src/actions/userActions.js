@@ -18,11 +18,12 @@ const login = async (username, password) => {
     console.log("error: ", err);
   }
 };
-const saveBlog = async (newEntry, title) => {
+const saveBlog = async (newEntry, title, tags) => {
   try {
     const data = {
       newBlogEntry: newEntry,
       title: title,
+      tags:tags
     };
     const url = "http://localhost:5000/user/blogmanage/savenewentry";
     const response = await fetch(url, {
@@ -38,12 +39,13 @@ const saveBlog = async (newEntry, title) => {
   }
 };
 
-const updateBlog = async (updatedEntry, title, blogId) => {
+const updateBlog = async (updatedEntry, title, blogId,tags) => {
   try {
     const data = {
       entryToUpdate: updatedEntry,
       title: title,
       id: blogId,
+      tags:tags
     };
     const url = "http://localhost:5000/user/blogmanage/updateentry";
 

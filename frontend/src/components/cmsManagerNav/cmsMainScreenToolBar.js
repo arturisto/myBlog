@@ -1,4 +1,4 @@
-import React, { Fragment, Component } from "react";
+import React from "react";
 
 //styles
 import "./cmsToolBar.scss";
@@ -8,9 +8,15 @@ import Button from "react-bootstrap/Button";
 
 export default function cmsToolBar(props) {
   const activePane = props.option;
+  const toggleBackPreviewButtonName =
+    activePane === "create" ? "Preivew" : "Back";
   const createButtonsOptions = [
     { size: "sm", name: "Save", onclick: props.onSaveEditor },
-    { size: "sm", name: "Preview", onclick: props.onPreviewEditor },
+    {
+      size: "sm",
+      name: toggleBackPreviewButtonName,
+      onclick: props.onPreviewEditor,
+    },
     { size: "sm", name: "Clear Editor", onclick: props.onClearEditor },
   ];
 
@@ -26,7 +32,7 @@ export default function cmsToolBar(props) {
 
   return (
     <div className="toolbarWrapper">
-      {activePane === "create" ? (
+      {activePane === "create" || activePane === "preview" ? (
         <>
           {createButtonsOptions.map(function (item, i) {
             return (

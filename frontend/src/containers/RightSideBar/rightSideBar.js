@@ -5,7 +5,7 @@ class RightSideBar extends Component {
     render (){
     
     return ( 
-        <div class = "rightSideBar">
+        <div className = "rightSideBar">
              {this.props.text}
         </div>
         )
