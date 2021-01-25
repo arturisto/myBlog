@@ -1,14 +1,40 @@
+//libraries
 const express = require("express");
-const router = express.Router();
-const User = require("../models/user");
-const Blogpost = require("../models/blogpost");
-const imageUploader = require("../utils/imageUploader");
-const uploadImage = require("../utils/saveImageLocaly");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const path = require("path");
 const fs = require("fs");
 
-const path = require("path");
+//functions
+const imageUploader = require("../utils/imageUploader");
+const uploadImage = require("../utils/saveImageLocaly");
 
-router.post("/blogmanage/uploadimage", async (req, res) => {
+//models
+const User = require("../models/user");
+const Blogpost = require("../models/blogpost");
+
+//constuns
+const router = express.Router();
+
+const verifyJWT = (req, res, next) => {
+
+  const token = req.headers["x-access-token"];
+  if (!token) {
+    res.status(403).json({ msg: "unautharized" });
+  } else {
+    jwt.verify(token, process.env["JWT_SECRET"], (err, decoded) => {
+      if (err) {
+        res.status(403).json({ msg: "unautharized " });
+      } else {
+        req.userId = decoded.id;
+        next();
+      }
+    });
+  }
+};
+
+//routes
+router.post("/blogmanage/uploadimage", verifyJWT, async (req, res) => {
   const imgUpload = uploadImage.single("image");
   imgUpload(req, res, function (err) {
     if (err) {
@@ -23,19 +49,7 @@ router.post("/blogmanage/uploadimage", async (req, res) => {
   });
 });
 
-router.post("/login", async (req, res) => {
-  try {
-    const user = await User.findOne({
-      where: { username: req.body.username, password: req.body.password },
-    });
-    console.log(user);
-    return res.status(200).json({ msg: "success" });
-  } catch {
-    res.status(404).json({ msg: "user not found" });
-  }
-});
-
-router.post("/blogmanage/savenewentry", async (req, res) => {
+router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
   const blogTitle = req.body.title;
   let newEntry = req.body.newBlogEntry;
 
@@ -58,19 +72,14 @@ router.post("/blogmanage/savenewentry", async (req, res) => {
     });
 
     //save blogPost to DB
-    const data = {
-      title: blogTitle,
-      metatitle: "meta",
-      content: newEntry,
-      createdAt: new Date(),
-    };
-    const { title, metatitle, content, createdAt } = data;
+
     try {
       Blogpost.create({
-        title,
-        metatitle,
-        content,
-        createdAt,
+        title: blogTitle,
+        metatitle: "meta",
+        content: newEntry,
+        createdAt: new Date(),
+        tags: req.body.tags,
       }).then(() => {});
     } catch (error) {
       console.log(error);
@@ -96,14 +105,15 @@ router.post("/blogmanage/savenewentry", async (req, res) => {
   }
 });
 
-router.post("/blogmanage/updateentry", async (req, res) => {
+router.post("/blogmanage/updateentry", verifyJWT, async (req, res) => {
   const blogId = req.body.id;
   const entryToUpdate = req.body.entryToUpdate;
   const title = req.body.title;
+  const tags = req.body.tags;
 
   try {
     await Blogpost.update(
-      { title: title, content: entryToUpdate },
+      { title: title, content: entryToUpdate, tags: tags },
       { where: { id: blogId } }
     );
 
@@ -112,7 +122,7 @@ router.post("/blogmanage/updateentry", async (req, res) => {
     console.log(error);
   }
 });
-router.get("/blogmanage/getnewentry", async (req, res) => {
+router.get("/blogmanage/getnewentry", verifyJWT, async (req, res) => {
   try {
     const blogId = req.query.blogId;
     const blogEntry = await Blogpost.findOne({ where: { id: blogId } });
@@ -122,7 +132,7 @@ router.get("/blogmanage/getnewentry", async (req, res) => {
   }
 });
 
-router.get("/blogmanage/getAllPosts", async (req, res) => {
+router.get("/blogmanage/getAllPosts", verifyJWT, async (req, res) => {
   try {
     const allEntries = await Blogpost.findAll();
     res.status(200).json({ msg: "success", body: allEntries });
@@ -131,7 +141,7 @@ router.get("/blogmanage/getAllPosts", async (req, res) => {
   }
 });
 
-router.post("/blogmanage/deleteEntries", async (req, res) => {
+router.post("/blogmanage/deleteEntries", verifyJWT, async (req, res) => {
   try {
     await Blogpost.destroy({ where: { id: req.body } });
     res.status(200).json({ msg: "success" });
@@ -140,7 +150,7 @@ router.post("/blogmanage/deleteEntries", async (req, res) => {
   }
 });
 
-router.post("/blogmanage/publishEntries", async (req, res) => {
+router.post("/blogmanage/publishEntries", verifyJWT, async (req, res) => {
   try {
     await Blogpost.update({ published: true }, { where: { id: req.body } });
     res.status(200).json({ msg: "success" });
@@ -149,7 +159,7 @@ router.post("/blogmanage/publishEntries", async (req, res) => {
   }
 });
 
-router.post("/blogmanage/unPublishEntries", async (req, res) => {
+router.post("/blogmanage/unPublishEntries", verifyJWT, async (req, res) => {
   try {
     await Blogpost.update({ published: false }, { where: { id: req.body } });
 
@@ -159,4 +169,87 @@ router.post("/blogmanage/unPublishEntries", async (req, res) => {
     res.status(404).json({ msg: error });
   }
 });
+
+
+
+router.post("/login", async (req, res) => {
+  const userName = req.body.username;
+  const pass = req.body.password;
+  try {
+    const user = await User.findOne({
+      where: { username: userName },
+    });
+    if (!user) {
+      res.status(404).json({ msg: "user or password is wrong", auth: false });
+    }
+
+    const hash = user.password;
+    bcrypt
+      .compare(pass, hash)
+      .then((result) => {
+        if (result) {
+          req.session.user = user.username;
+          const id = user.id;
+          const options = {
+            expiresIn: "1d",
+          };
+          const token = jwt.sign({ id }, process.env["JWT_SECRET"], options);
+          req.session.token = token;
+          return res.status(200).json({ auth: true, token: token });
+        } else {
+          res
+            .status(404)
+            .json({ msg: "user or password is wrong", auth: false });
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+        res.status(404).json({ msg: "user or password is wrong", auth: false });
+      });
+  } catch (error) {
+    console.log("error", error);
+  }
+});
+
+router.post("/signup", verifyJWT, async (req, res) => {
+  console.log("body", req.body);
+  const newUser = {
+    name: req.body.name,
+    username: req.body.username,
+    password: req.body.password,
+  };
+
+  bcrypt.genSalt(10, (err, salt) =>
+    bcrypt.hash(newUser.password, salt, (err, hash) => {
+      if (err) throw err;
+      //save pass to hash
+      //newUser.password = hash;
+      //save user
+      console.log(newUser);
+      try {
+        User.create({
+          name: newUser.name,
+          username: newUser.username,
+          password: hash,
+        }).then((response) => console.log(response));
+      } catch (error) {
+        console.log(error);
+      }
+
+      console.log(hash);
+    })
+  );
+
+  //ELSE statement ends here
+
+  return "hi";
+});
+
+router.post("/isLogin",verifyJWT, async (req, res) => {
+
+  
+  return res.status(200).json({ auth: true });
+});
+
+
 module.exports = router;

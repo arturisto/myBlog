@@ -72,11 +72,14 @@ class CmsManager extends Component {
 
   async toggleView(pane) {
     const headers = await getBlogPostHeaders();
+    console.log(headers);
     if (headers.error === "error") {
       this.setState({
         activeTab: pane,
         modalStatus: true,
-        modalText: headers.errorText,
+        modalTitle: "Error",
+        modalText: "Server error",
+        modalType: "error",
       });
     } else {
       this.setState({
@@ -148,7 +151,6 @@ class CmsManager extends Component {
     });
   }
   handlePreviewEditor() {
-    console.log(this.state.activeTab);
     this.setState({
       activeTab:
         this.state.activeTab === CMSTABS.CREATE
@@ -395,20 +397,24 @@ class CmsManager extends Component {
 
             {this.state.activeTab === CMSTABS.DISPLAY ? (
               <div id={CMSTABS.DISPLAY}>
-                <ViewPosts
-                  postHeaders={this.state.postsToShow}
-                  viewMode={this.state.viewMode}
-                  onSeeAll={() => this.handleSeeAll()}
-                  onSeePublished={() => this.handleSeePublished()}
-                  onSeeDrafts={() => this.handleSeeDrafts()}
-                  onPublish={() => this.handlePublish()}
-                  onEdit={() => this.handleEdit()}
-                  onDelete={() => this.handleDelete()}
-                  onCheckbox={(checkedItem, checkedStatus) =>
-                    this.handleCheckbox(checkedItem, checkedStatus)
-                  }
-                  checkedItems={this.state.checkedItems}
-                ></ViewPosts>
+                {this.state.postsToShow.length >= 0 ? (
+                  <ViewPosts
+                    postHeaders={this.state.postsToShow}
+                    viewMode={this.state.viewMode}
+                    onSeeAll={() => this.handleSeeAll()}
+                    onSeePublished={() => this.handleSeePublished()}
+                    onSeeDrafts={() => this.handleSeeDrafts()}
+                    onPublish={() => this.handlePublish()}
+                    onEdit={() => this.handleEdit()}
+                    onDelete={() => this.handleDelete()}
+                    onCheckbox={(checkedItem, checkedStatus) =>
+                      this.handleCheckbox(checkedItem, checkedStatus)
+                    }
+                    checkedItems={this.state.checkedItems}
+                  ></ViewPosts>
+                ) : (
+                  ""
+                )}
               </div>
             ) : (
               ""

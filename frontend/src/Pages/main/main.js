@@ -9,8 +9,6 @@ import Button from "../../components/buttons/button"
 
 
 export default function Main() {
-
-
         return ( 
             <Fragment>
                  <NavigationBar> </NavigationBar>

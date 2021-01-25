@@ -3,12 +3,15 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./login.scss";
 
-import { login } from "../../actions/userActions";
+import { signup } from "../../actions/userActions";
 import axios from "axios";
 
-export default function Login(props) {
+export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+
+  const [isLoggedIn, setLogin] = useState(false);
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -16,19 +19,22 @@ export default function Login(props) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    const getLogin = await login(username, password);
-    console.log(getLogin);
-    if (getLogin) {
-      props.onLogin(true);
-    } else {
-      props.onLogin(false);
-    }
+    const reply = await signup(name,username,password)
+    console.log("reply", reply)
   }
 
   return (
     <div className="Login">
       <Form onSubmit={handleSubmit}>
+      <Form.Group size="lg" controlId="password">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </Form.Group>
+
         <Form.Group size="lg" controlId="username">
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -47,9 +53,10 @@ export default function Login(props) {
           />
         </Form.Group>
         <Button block size="lg" type="submit" disabled={!validateForm()}>
-          Login
+          Sign Up
         </Button>
       </Form>
+
     </div>
   );
 }

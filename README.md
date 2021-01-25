@@ -33,15 +33,19 @@ Areas to build:
 **Quill**
 
 1. Quill Editor - option to change RTL and LTR typing
-2. Clear editor sends request to server to clear the temp image upload folder
+2. Clear editor sends request to server to clear the temp image 
 
-**AWS fixes**
+**AWS**
 
 1. AWS - make the bucket private
 
 2. Image Upload - Upon fail make another 2-3 attempts of uploading
 
    1. Check error types for different responses
+2. image upload failed, show error in a console on user screen
 
-   2. image upload failed, show error in a console on user screen
+**Content Management System**
 
+1. Add filters by date to table
+2. Add pagination(10 items per page)
+3. More secure way of authentication
