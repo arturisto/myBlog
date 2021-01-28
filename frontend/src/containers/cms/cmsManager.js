@@ -52,6 +52,7 @@ class CmsManager extends Component {
     this.handleSaveTitleToState = this.handleSaveTitleToState.bind(this);
     this.handleClearEditor = this.handleClearEditor.bind(this);
     this.handlePreviewEditor = this.handlePreviewEditor.bind(this);
+    this.handleCreateNewEntry = this.handleCreateNewEntry.bind(this);
 
     //Display Tab Binds
     this.handlePublish = this.handlePublish.bind(this);
@@ -88,6 +89,17 @@ class CmsManager extends Component {
       });
     }
   }
+  handleCreateNewEntry() {
+    this.tagsInput.current.value = "food";
+    this.setState({
+      editor: "",
+      postTitle: "",
+      editorToClear: true,
+      checkedItems: [],
+      isEdit: false,
+      entryEditId: "",
+    });
+  }
   handleCloseModal() {
     this.setState({
       modalStatus: false,
@@ -107,9 +119,13 @@ class CmsManager extends Component {
 
   async handleSaveEditor() {
     const tags = this.tagsInput.current.value;
-    const arrayTags = tags.split(",").map(function (tag) {
-      return tag.trim();
-    });
+
+    const arrayTags =
+      tags.length >= 1
+        ? tags.split(",").map(function (tag) {
+            return tag.trim();
+          })
+        : "";
     let response;
     if (this.state.isEdit) {
       response = await updateBlog(
@@ -145,9 +161,10 @@ class CmsManager extends Component {
     }
   }
   handleClearEditor() {
-    this.tagsInput.current.value = "";
+    this.tagsInput.current.value = "food";
     this.setState({
       editorToClear: true,
+      postTitle: "",
     });
   }
   handlePreviewEditor() {
@@ -200,7 +217,7 @@ class CmsManager extends Component {
       });
     } else if (length > 1) {
       this.setState({
-        modaStatus: true,
+        modalStatus: true,
         modalTitle: "Wrong Selection",
         modalText: "Please choose only one item",
         modalType: "error",
@@ -215,10 +232,9 @@ class CmsManager extends Component {
           isEdit: true,
           entryEditId: id,
         });
-        // if (reply.body.tags) {
-        //   const tagsToDisplay = reply.body.tags.join(", ");
-        //   this.tagsInput.current.value = tagsToDisplay;
-        // }
+
+        const tagsToDisplay = reply.body.tags.join(", ");
+        this.tagsInput.current.value = tagsToDisplay;
       } else {
         this.setState({
           modalStatus: true,
@@ -365,6 +381,7 @@ class CmsManager extends Component {
               onSeeAll={() => this.handleSeeAll()}
               onSeeDrafts={() => this.handleSeeDrafts()}
               onSeePublished={() => this.handleSeePublished()}
+              onCreateNewEntry={() => this.handleCreateNewEntry()}
             ></CmsMainScreenToolBar>
 
             {this.state.activeTab === CMSTABS.CREATE ? (
@@ -388,6 +405,7 @@ class CmsManager extends Component {
                     key="tags"
                     id="tags"
                     className="w-100"
+                    defaultValue="food"
                   ></input>
                 </div>
               </div>

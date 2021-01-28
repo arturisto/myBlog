@@ -17,7 +17,6 @@ const Blogpost = require("../models/blogpost");
 const router = express.Router();
 
 const verifyJWT = (req, res, next) => {
-
   const token = req.headers["x-access-token"];
   if (!token) {
     res.status(403).json({ msg: "unautharized" });
@@ -74,13 +73,14 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
     //save blogPost to DB
 
     try {
-      Blogpost.create({
+      const response = Blogpost.create({
         title: blogTitle,
         metatitle: "meta",
         content: newEntry,
         createdAt: new Date(),
         tags: req.body.tags,
-      }).then(() => {});
+      });
+      console.log(response);
     } catch (error) {
       console.log(error);
       return res.status(404).json({ msg: error });
@@ -91,12 +91,14 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
     const absolutePath = path.resolve(relativePath);
 
     const files = fs.readdirSync(absolutePath);
-    files.forEach((file) => {
-      const fileToUnlink = path.join(absolutePath, file);
-      fs.unlink(fileToUnlink, (err) => {
-        if (err) throw err;
+    if (files.length >= 1) {
+      files.forEach((file) => {
+        const fileToUnlink = path.join(absolutePath, file);
+        fs.unlink(fileToUnlink, (err) => {
+          if (err) throw err;
+        });
       });
-    });
+    }
 
     return res.status(200).json({ msg: "ok" });
   } catch (error) {
@@ -110,7 +112,6 @@ router.post("/blogmanage/updateentry", verifyJWT, async (req, res) => {
   const entryToUpdate = req.body.entryToUpdate;
   const title = req.body.title;
   const tags = req.body.tags;
-
   try {
     await Blogpost.update(
       { title: title, content: entryToUpdate, tags: tags },
@@ -124,6 +125,7 @@ router.post("/blogmanage/updateentry", verifyJWT, async (req, res) => {
 });
 router.get("/blogmanage/getnewentry", verifyJWT, async (req, res) => {
   try {
+  
     const blogId = req.query.blogId;
     const blogEntry = await Blogpost.findOne({ where: { id: blogId } });
     res.status(200).json({ msg: "success", body: blogEntry });
@@ -165,12 +167,10 @@ router.post("/blogmanage/unPublishEntries", verifyJWT, async (req, res) => {
 
     res.status(200).json({ msg: "success" });
   } catch (error) {
-    console.log("error");
+    console.log(error);
     res.status(404).json({ msg: error });
   }
 });
-
-
 
 router.post("/login", async (req, res) => {
   const userName = req.body.username;
@@ -212,7 +212,6 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/signup", verifyJWT, async (req, res) => {
-  console.log("body", req.body);
   const newUser = {
     name: req.body.name,
     username: req.body.username,
@@ -220,18 +219,14 @@ router.post("/signup", verifyJWT, async (req, res) => {
   };
 
   bcrypt.genSalt(10, (err, salt) =>
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
+    bcrypt.hash(newUser.password, salt, async (err, hash) => {
       if (err) throw err;
-      //save pass to hash
-      //newUser.password = hash;
-      //save user
-      console.log(newUser);
       try {
-        User.create({
+        const response = await User.create({
           name: newUser.name,
           username: newUser.username,
           password: hash,
-        }).then((response) => console.log(response));
+        });
       } catch (error) {
         console.log(error);
       }
@@ -245,11 +240,8 @@ router.post("/signup", verifyJWT, async (req, res) => {
   return "hi";
 });
 
-router.post("/isLogin",verifyJWT, async (req, res) => {
-
-  
+router.post("/isLogin", verifyJWT, async (req, res) => {
   return res.status(200).json({ auth: true });
 });
-
 
 module.exports = router;

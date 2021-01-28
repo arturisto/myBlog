@@ -1,10 +1,16 @@
+//utils
+const getPreviewImageUrl = require( "../utils/getPreviewImageUrl")
+
 const express = require('express')
 const router = express.Router();
-const blogpost = require("../models/blogpost");
+const Blogpost = require("../models/blogpost");
+
+
+
 
 async function getAll(){
     try {
-        const alldata = await blogpost.findAll();
+        const alldata = await Blogpost.findAll();
         console.log("alldata",alldata)
     } catch (error) {
         console.log("error:", error)
@@ -18,23 +24,21 @@ router.post("/", (req, res) => {
 });
 //add ite
 
-router.post("/add", (req, res) => {
-    const data = {
-        title: "hello",
-        metatitle: "meta",
-        content: "hello there all!",
-    };
+router.get("/getlatest", async(req,res)=>{
 
-    let {title, metatitle, content } = data;
-    blogpost.create({
-        title,
-        metatitle,
-        content 
-    })
-        .then(test =>res.status(200).json({
-            status:"success"
-        }))
-        .catch(err => console.log("error", err));
+    try {
+        const blogEntries = await Blogpost.findAll({
+            limit:3,
+            order:[["publishedAt" ,'DESC']] , 
+        });
+
+        const blogEntiresWithPreviewURLs = getPreviewImageUrl(blogEntries)
+        res.status(200).json({posts: blogEntiresWithPreviewURLs})
+    } catch (error) {
+        console.log(error)
+    }
+   
+    
 
 });
 

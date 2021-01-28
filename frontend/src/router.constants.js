@@ -3,7 +3,7 @@ export const PUBLIC_ROUTE = {
     BLOGPOST: '/blogpage/:id',
     ABOUT: "/about",
     CONTACTUS: "/contactUs",
-    LOGIN:"/login",
+    LOGIN:"/secretloginurl",
     CMS:"/cms",
 
 }

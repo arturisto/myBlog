@@ -18,6 +18,7 @@ export default function cmsToolBar(props) {
       onclick: props.onPreviewEditor,
     },
     { size: "sm", name: "Clear Editor", onclick: props.onClearEditor },
+    { size: "sm", name: "New Entry", onclick: props.onCreateNewEntry },
   ];
 
   const displayButtonsOptions = [

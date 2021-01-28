@@ -1,6 +1,5 @@
 //*****imports******//
 import React, { Fragment, Component } from "react";
-import { useParams } from "react-router-dom";
 //Containers
 import Navbar from "../../containers/NavBar/navbar";
 import LeftSideBar from "../../containers/LeftSideBar/leftSideBar";
@@ -24,11 +23,12 @@ class BlogPage extends Component {
     this.state = {
       blogData: false,
       isPreview:false,
+  
     };
   }
 
   async componentDidMount() {
-    const blogId = 10034;
+    const blogId = this.props.match.params.id;
     const blogEntry = await getSingleBlogEntry(blogId);
     console.log(blogEntry.body);
     this.setState({

@@ -49,3 +49,5 @@ Areas to build:
 1. Add filters by date to table
 2. Add pagination(10 items per page)
 3. More secure way of authentication
+4.  Add loaders
+5. Fix error handling along the route

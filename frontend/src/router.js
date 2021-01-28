@@ -3,7 +3,6 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { PUBLIC_ROUTE } from "./router.constants";
 import PrivateRoute from "./components/routes/privateRoute";
 
-
 const publicRoutes = [
   {
     path: PUBLIC_ROUTE.LANDING,
@@ -36,17 +35,21 @@ export default function Routes() {
       <Router>
         <Switch>
           {publicRoutes.map((route, index) => (
-            <Route key={index} path={route.path} exact={route.exact}>
-              <route.component />
-            </Route>
+            <Route
+              key={index}
+              path={route.path}
+              exact={route.exact}
+              component={route.component}
+            />
           ))}
-          
+
           {privateRoutes.map((route, index) => (
-            // <Route key={index} path={route.path} exact={route.exact}>
-            //   <route.component />
-            // </Route>
-          
-            <PrivateRoute component = {route.component} key={index} path={route.path} exact={route.exact} ></PrivateRoute>
+            <PrivateRoute
+              component={route.component}
+              key={index}
+              path={route.path}
+              exact={route.exact}
+            />
           ))}
         </Switch>
       </Router>

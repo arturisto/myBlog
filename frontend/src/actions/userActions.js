@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import {getBaseUrl} from './utils'
 
 const login = async (username, password) => {
   try {
@@ -7,7 +7,9 @@ const login = async (username, password) => {
       username: username,
       password: password,
     };
-    const url = "http://localhost:5000/user/login";
+
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/login";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -39,7 +41,8 @@ const signup = async (name, username, password) => {
     username: username,
     password: password,
   };
-  const url = "http://localhost:5000/user/signup";
+  const baseUrl = getBaseUrl();
+  const url = baseUrl + "user/signup";
   console.log(data);
   const response = await fetch(url, {
     method: "POST",
@@ -66,7 +69,8 @@ const saveBlog = async (newEntry, title, tags) => {
       title: title,
       tags: tags,
     };
-    const url = "http://localhost:5000/user/blogmanage/savenewentry";
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/savenewentry";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -91,7 +95,8 @@ const updateBlog = async (updatedEntry, title, blogId, tags) => {
       id: blogId,
       tags: tags,
     };
-    const url = "http://localhost:5000/user/blogmanage/updateentry";
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/updateentry";
 
     await fetch(url, {
       method: "POST",
@@ -110,8 +115,10 @@ const updateBlog = async (updatedEntry, title, blogId, tags) => {
 
 const getSingleBlogEntry = async (entryId) => {
   try {
-    const url =
-      "http://localhost:5000/user/blogmanage/getnewentry?blogId=" + entryId;
+    console.log("hiiii")
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/getnewentry?blogId=" + entryId;
+
     const result = await fetch(url, {
       method: "GET",
       headers: {
@@ -134,13 +141,9 @@ const uploadImageToServer = async (formData) => {
     },
   };
   try {
-    return axios
-      .post(
-        "http://localhost:5000/user/blogmanage/uploadimage",
-        formData,
-        config
-      )
-      .then((res) => res.data.imageUrl);
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/uploadimage";
+    return axios.post(url, formData, config).then((res) => res.data.imageUrl);
   } catch (error) {
     console.log(error);
   }
@@ -154,10 +157,9 @@ const getBlogPostHeaders = async () => {
     },
   };
   try {
-    const resp = await axios.get(
-      "http://localhost:5000/user/blogmanage/getAllPosts",
-      config
-    );
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/getAllPosts";
+    const resp = await axios.get(url, config);
     return resp.data;
   } catch (error) {
     return { error: "error", errorText: error };
@@ -166,7 +168,8 @@ const getBlogPostHeaders = async () => {
 
 const deleteEntries = async (blogIds) => {
   try {
-    const url = "http://localhost:5000/user/blogmanage/deleteEntries";
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/deleteEntries";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -184,7 +187,8 @@ const deleteEntries = async (blogIds) => {
 
 const publishEntries = async (blogIds) => {
   try {
-    const url = "http://localhost:5000/user/blogmanage/publishEntries";
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/publishEntries";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -202,7 +206,8 @@ const publishEntries = async (blogIds) => {
 
 const unPublishEntries = async (blogIds) => {
   try {
-    const url = "http://localhost:5000/user/blogmanage/unPublishEntries";
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/unPublishEntries";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -219,24 +224,22 @@ const unPublishEntries = async (blogIds) => {
   }
 };
 
-
 const isLogin = async () => {
   const token = localStorage.getItem("token");
- 
+
   if (token) {
-    const url = "http://localhost:5000/user/isLogin";
-   const reply =await  fetch(url, {
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/isLogin";
+    const reply = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-access-token": token,
       },
-
     });
-    
- 
+
     return handleApiBoolReply(reply);
-  } else {  
+  } else {
     return false;
   }
 };
