@@ -12,6 +12,7 @@ const uploadImage = require("../utils/saveImageLocaly");
 //models
 const User = require("../models/user");
 const Blogpost = require("../models/blogpost");
+const Tags = require("../models/tags");
 
 //constuns
 const router = express.Router();
@@ -125,7 +126,6 @@ router.post("/blogmanage/updateentry", verifyJWT, async (req, res) => {
 });
 router.get("/blogmanage/getnewentry", verifyJWT, async (req, res) => {
   try {
-  
     const blogId = req.query.blogId;
     const blogEntry = await Blogpost.findOne({ where: { id: blogId } });
     res.status(200).json({ msg: "success", body: blogEntry });
@@ -237,11 +237,41 @@ router.post("/signup", verifyJWT, async (req, res) => {
 
   //ELSE statement ends here
 
-  return "hi";
+  return false;
 });
 
 router.post("/isLogin", verifyJWT, async (req, res) => {
   return res.status(200).json({ auth: true });
+});
+
+router.get("/blogmanage/getAllTags", async (req, res) => {
+  try {
+    const allEntries = await Tags.findAll();
+    res.status(200).json({ msg: "success", body: allEntries });
+  } catch (error) {
+    res.status(400).json({ msg: error });
+  }
+});
+router.post("/blogmanage/saveNewTag", verifyJWT, async (req, res) => {
+  const newTag = req.body[0];
+  try {
+    await Tags.create({ name: newTag });
+    res.status(200).json({ msg: "success", body: true });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ msg: error });
+  }
+});
+router.post("/blogmanage/deleteTag", verifyJWT, async (req, res) => {
+  const newTag = req.body;
+  console.log(newTag)
+  try {
+    await Tags.destroy({ where: { id: newTag } });
+    res.status(200).json({ msg: "success", body: true });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ msg: error });
+  }
 });
 
 module.exports = router;

@@ -1,0 +1,26 @@
+.carusel-main {
+  margin-top: 40px;
+  height: 600px !important;
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.ggg {
+  overflow: hidden;
+}
+.ggg img {
+  height: 400px;
+  max-width: 400px;
+
+  object-fit: cover;
+}
+
+.slick-next {
+  right: 10px;
+  z-index: 1000;
+}
+.slick-prev {
+  left: 10px;
+  z-index: 1000;
+}

@@ -9,8 +9,7 @@ export default function Cards(props) {
 
   const blogId = blogData.id;
   const baseUrl = getBaseFrontUrl(blogId);
-  const postUrl = baseUrl+"blogpage/"+blogId;
-  console.log(postUrl)
+  const postUrl = baseUrl + "blogpage/" + blogId;
   const preview = createPewviewText(content);
 
   return (

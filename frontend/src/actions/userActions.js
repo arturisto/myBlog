@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getBaseUrl} from './utils'
+import { getBaseUrl } from "./utils";
 
 const login = async (username, password) => {
   try {
@@ -115,7 +115,7 @@ const updateBlog = async (updatedEntry, title, blogId, tags) => {
 
 const getSingleBlogEntry = async (entryId) => {
   try {
-    console.log("hiiii")
+    console.log("hiiii");
     const baseUrl = getBaseUrl();
     const url = baseUrl + "user/blogmanage/getnewentry?blogId=" + entryId;
 
@@ -244,6 +244,75 @@ const isLogin = async () => {
   }
 };
 
+const getAllTags = async () => {
+  try {
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/getAllTags";
+    console.log(url);
+    const reply = await fetch(url, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (handleApiBoolReply(reply)) {
+      const body = await reply.json();
+      console.log(body);
+
+      return body;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+const saveNewTag = async (tag) => {
+  const token = localStorage.getItem("token");
+  try {
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/saveNewTag";
+    const reply = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      },
+      body: JSON.stringify([tag]),
+    });
+    console.log(reply);
+    return handleApiBoolReply(reply);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+const deleteTag = async (tags) => {
+  try {
+    console.log(tags)
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "user/blogmanage/deleteTag";
+    const token = localStorage.getItem("token");
+
+    const reply = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      },
+      body: JSON.stringify(tags),
+    });
+
+    return handleApiBoolReply(reply);
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 const handleApiBoolReply = (reply) => {
   return reply.status === 200 ? true : false;
 };
@@ -260,4 +329,7 @@ export {
   unPublishEntries,
   updateBlog,
   isLogin,
+  getAllTags,
+  saveNewTag,
+  deleteTag,
 };

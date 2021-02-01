@@ -8,6 +8,7 @@ const Blogpost = require("../models/blogpost");
 
 
 
+
 async function getAll(){
     try {
         const alldata = await Blogpost.findAll();

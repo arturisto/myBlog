@@ -2,7 +2,8 @@ import React, { Fragment, Component } from "react";
 //containers
 import CreatePost from "./createPost";
 import ViewPosts from "./viewPosts";
-import Preview from "./preview";
+import ViewTags from "./viewTags";
+
 //components
 import CmsMainScreenToolBar from "../../components/cmsManagerNav/cmsMainScreenToolBar";
 import Modal from "../../components/modals/Modal";
@@ -20,6 +21,9 @@ import {
   publishEntries,
   unPublishEntries,
   updateBlog,
+  getAllTags,
+  saveNewTag,
+  deleteTag,
 } from "../../actions/userActions";
 //utilites
 import { CMSVIEWMODES, CMSTABS } from "../../utils/enums";
@@ -42,6 +46,10 @@ class CmsManager extends Component {
       modalType: "",
       modalTitle: "",
       modalText: "",
+      tags: [],
+      checkedTags: [],
+      tagMode: "view",
+      tagInput:""
     };
     //binds
     this.toggleView = this.toggleView.bind(this);
@@ -63,6 +71,14 @@ class CmsManager extends Component {
     this.handleSeePublished = this.handleSeePublished.bind(this);
     this.handleUnPublish = this.handleUnPublish.bind(this);
     this.handleCheckbox = this.handleCheckbox.bind(this);
+    //tags binds
+    this.handleShowAllTags = this.handleShowAllTags.bind(this);
+    this.handleCreateNewTag = this.handleCreateNewTag.bind(this);
+    this.handleSaveNewTag = this.handleSaveNewTag.bind(this);
+    this.handleDeleteTags = this.handleDeleteTags.bind(this);
+    this.handleTagsCheckbox = this.handleTagsCheckbox.bind(this);
+    this.handleTagEdit = this.handleTagEdit.bind(this);
+    this.raiseTagsModal = this.raiseTagsModal.bind(this);
     //modal binds
     this.handleConfirm = this.handleConfirm.bind(this);
     this.handleDeny = this.handleDeny.bind(this);
@@ -73,7 +89,6 @@ class CmsManager extends Component {
 
   async toggleView(pane) {
     const headers = await getBlogPostHeaders();
-    console.log(headers);
     if (headers.error === "error") {
       this.setState({
         activeTab: pane,
@@ -327,6 +342,70 @@ class CmsManager extends Component {
     }
   }
 
+  async handleShowAllTags() {
+    const tags = await getAllTags();
+    console.log(tags);
+    this.setState({
+      tags: tags.body,
+      tagMode: "view",
+    });
+  }
+  handleCreateNewTag() {
+    console.log("create");
+    this.setState({
+      tagMode: "create",
+    });
+  }
+  handleTagEdit(event){
+    this.setState({
+      tagInput:event.target.value
+    })
+  }
+  async handleSaveNewTag() {
+    console.log("save");
+    const reply =await saveNewTag(this.state.tagInput);
+    this.raiseTagsModal(reply,"save")
+    
+  }
+  handleDeleteTags() {
+    console.log("delete");
+    const reply = deleteTag(this.state.checkedTags);
+    this.raiseTagsModal(reply, "delete");
+  }
+
+  raiseTagsModal(reply, text){
+    if (reply) {
+      this.setState({
+        tagsInput:"",
+        modalStatus: true,
+        modalTitle: "Success",
+        modalText: "Tag is "+text,
+        modalType: "error",
+      });
+    }
+    else{
+      this.setState({
+        tagsInput:"",
+        modalStatus: true,
+        modalTitle: "Error",
+        modalText: "Error",
+        modalType: "success",
+      });
+    }
+  }
+
+  handleTagsCheckbox(checkedTag, checkedStatus) {
+    let newCheckedtags = this.state.checkedTags;
+    if (checkedStatus) {
+      newCheckedtags.push(checkedTag);
+    } else {
+      const index = newCheckedtags.indexOf(checkedTag);
+      newCheckedtags.splice(index, 1);
+    }
+    this.setState({
+      checkedItems: newCheckedtags,
+    });
+  }
   closeModal() {
     this.setState({
       modalStatus: false,
@@ -367,6 +446,15 @@ class CmsManager extends Component {
             >
               Display
             </Button>
+            <Button
+              className="nav-pane-btn"
+              variant="secondary"
+              onClick={() => {
+                this.toggleView(CMSTABS.TAGS_MANAGER);
+              }}
+            >
+              Tags
+            </Button>
           </div>
           <div className="tab-pane">
             <CmsMainScreenToolBar
@@ -382,6 +470,10 @@ class CmsManager extends Component {
               onSeeDrafts={() => this.handleSeeDrafts()}
               onSeePublished={() => this.handleSeePublished()}
               onCreateNewEntry={() => this.handleCreateNewEntry()}
+              onShowAllTags={() => this.handleShowAllTags()}
+              onSaveTag={() => this.handleSaveNewTag()}
+              onDeleteTag={() => this.handleDeleteTags()}
+              onCreateNewTag={() => this.handleCreateNewTag()}
             ></CmsMainScreenToolBar>
 
             {this.state.activeTab === CMSTABS.CREATE ? (
@@ -437,11 +529,32 @@ class CmsManager extends Component {
             ) : (
               ""
             )}
-            {this.state.activeTab === CMSTABS.PREVIEW ? (
-              <Preview
-                blogData={this.state.editor}
-                blogTitle={this.state.postTitle}
-              ></Preview>
+            {this.state.activeTab === CMSTABS.TAGS_MANAGER ? (
+              <div id={CMSTABS.TAGS_MANAGER}>
+                {this.state.tagMode === "view" ? (
+                  <ViewTags
+                    tagsToShow={this.state.tags}
+                    onTagsCheckbox={(checkedTag, checkedStatus) =>
+                      this.handleTagsCheckbox(checkedTag, checkedStatus)
+                    }
+                    checkedTags={this.state.checkedTags}
+                  ></ViewTags>
+                ) : (
+                  <>
+                    <span className="pr-3">
+                      <strong>Tag Name:</strong>
+                    </span>
+                    <input
+                      type="text"
+                      name="entryName"
+                      className="w-25"
+                      placeholder="enter a tag name"
+                      value={this.state.tagInput}
+                      onChange={this.handleTagEdit}
+                    ></input>
+                  </>
+                )}
+              </div>
             ) : (
               ""
             )}

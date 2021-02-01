@@ -5,5 +5,6 @@ export const PUBLIC_ROUTE = {
     CONTACTUS: "/contactUs",
     LOGIN:"/secretloginurl",
     CMS:"/cms",
+    LOCAL:"/local"
 
 }

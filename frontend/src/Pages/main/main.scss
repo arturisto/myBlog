@@ -3,9 +3,22 @@
     
 }
 
-.mainWrapper{
-    height:100%;
+.mainIntroWrapper{
+    margin:auto;
+    display:inline-block;
  
+}
+.intro{
+    height:200px;
+}
+
+.baner{
+    width:100%;
+    height:500px;
+}
+.banner-img{
+    object-fit: cover;
+    width:100%;
 }
 .mainContentWrapper{
     display:flex;
@@ -16,6 +29,17 @@
 .subMainContentWrapper >.btn{
     margin-top:15px;
 
+}
+.noOverflow{
+    overflow-y: hidden !important;
+}
+
+
+.back-to-top{
+    position:fixed;
+    bottom:50px;
+    right:20px;
+    z-index:5;
 }
 
 

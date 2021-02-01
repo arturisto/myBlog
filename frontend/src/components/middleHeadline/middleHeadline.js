@@ -3,9 +3,9 @@
 import React from 'react';
 import "./middleHeadline.scss"
 
-export default function ({text}){
+export default function (props){
 
     return(
-        <h1 className="middleHeadline"> {text}</h1>
+        <h1 id={props.id} className="middleHeadline"> {props.text}</h1>
     )
 }

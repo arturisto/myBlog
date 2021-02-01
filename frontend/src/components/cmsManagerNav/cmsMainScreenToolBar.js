@@ -30,6 +30,12 @@ export default function cmsToolBar(props) {
     { size: "sm", name: "Delete", onclick: props.onDelete },
     { size: "sm", name: "Unpublish", onclick: props.onUnPublish },
   ];
+  const tagsButtonsOptions = [
+    { size: "sm", name: "Show All", onclick: props.onShowAllTags },
+    { size: "sm", name: "Save Tag", onclick: props.onSaveTag },
+    { size: "sm", name: "Delete Tags", onclick: props.onDeleteTag },
+    { size: "sm", name: "Create Tag", onclick: props.onCreateNewTag },
+  ];
 
   return (
     <div className="toolbarWrapper">
@@ -63,9 +69,23 @@ export default function cmsToolBar(props) {
             );
           })}
         </>
+      ) : activePane === "tags" ? (
+        <>
+        {tagsButtonsOptions.map(function (item, i) {
+          return (
+            <Button
+              key={"btn" + item.name}
+              size={item.size}
+              className="m-1"
+              onClick={() => item.onclick()}
+            >
+              {item.name}
+            </Button>
+          );
+        })}
+        </>
       ) : (
-        //edit pane
-        <></>
+        ""
       )}
     </div>
   );
