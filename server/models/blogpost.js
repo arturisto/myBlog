@@ -32,6 +32,9 @@ const blogpost = db.define("blogpost", {
   tags: {
     type: Sequelize.ARRAY(Sequelize.TEXT),
   },
+  entryType: {
+    type: Sequelize.CHAR,
+  },
 });
 
 module.exports = blogpost;

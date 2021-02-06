@@ -81,12 +81,6 @@ class Main extends Component {
     this.state = {
       latestBlogs: [],
     };
-    this.scrollToInstush = scroller.scrollTo("instush", {
-      duration: 150,
-      smooth: true,
-      offset: 50, // Scrolls to element + 50 pixels down the page
-    });
-
     this.scollers = scrollers;
     this.handleBackToTop = this.handleBackToTop.bind(this);
   }

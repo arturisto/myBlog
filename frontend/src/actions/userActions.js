@@ -248,7 +248,6 @@ const getAllTags = async () => {
   try {
     const baseUrl = getBaseUrl();
     const url = baseUrl + "user/blogmanage/getAllTags";
-    console.log(url);
     const reply = await fetch(url, {
       method: "get",
       headers: {
@@ -258,8 +257,6 @@ const getAllTags = async () => {
 
     if (handleApiBoolReply(reply)) {
       const body = await reply.json();
-      console.log(body);
-
       return body;
     } else {
       return false;

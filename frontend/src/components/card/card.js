@@ -6,12 +6,10 @@ import "./card.scss";
 export default function Cards(props) {
   const blogData = props.blogData;
   const content = blogData.content;
-
   const blogId = blogData.id;
   const baseUrl = getBaseFrontUrl(blogId);
   const postUrl = baseUrl + "blogpage/" + blogId;
   const preview = createPewviewText(content);
-
   return (
     <div className="card">
       <div className="card-body">

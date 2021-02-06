@@ -1,14 +1,13 @@
 import axios from "axios";
 import { getBaseUrl } from "./utils";
 
-const getLatestBlogs = async (req, res) => {
+const getLatestBlogs = async () => {
   const baseUrl = getBaseUrl();
   const url = baseUrl + "blog/getlatest";
 
   const config = {
     headers: {
       "content-type": "application/json",
-      "x-access-token": localStorage.getItem("token"),
     },
   };
   try {
@@ -21,4 +20,27 @@ const getLatestBlogs = async (req, res) => {
   }
 };
 
-export { getLatestBlogs };
+const getEntriesByType = async (type, pageNumber) => {
+  const baseUrl = getBaseUrl();
+  const url = baseUrl + "blog/getEntriesByType";
+
+  const config = {
+    headers: {
+      "content-type": "application/json",
+    },
+    body: {
+      entryType: type,
+      pageNumber: pageNumber,
+    },
+  };
+  try {
+    const response = await axios.post(url, config);
+    const blogs = response.data;
+    return blogs;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export { getLatestBlogs, getEntriesByType };
