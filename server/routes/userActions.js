@@ -52,8 +52,13 @@ router.post("/blogmanage/uploadimage", verifyJWT, async (req, res) => {
 router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
   const blogTitle = req.body.title;
   let newEntry = req.body.newBlogEntry;
+  const tags = req.body.tags;
+  const seoTags = req.body.seoTags;
 
   try {
+    // const tagIds = await createTagsPromiseAll(tags);
+    // console.log("tags", tags);
+    // console.log("ids", tagIds);
     const uplaodedImagesUrls = await imageUploader(blogTitle);
     uplaodedImagesUrls.forEach((image) => {
       if (image.status === "rejected") {
@@ -73,20 +78,15 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
 
     //save blogPost to DB
 
-    try {
-      const response = Blogpost.create({
-        title: blogTitle,
-        metatitle: "meta",
-        content: newEntry,
-        createdAt: new Date(),
-        tags: req.body.tags,
-      });
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-      return res.status(404).json({ msg: error });
-    }
-
+    const response = await Blogpost.create({
+      title: blogTitle,
+      metatitle: "meta",
+      content: newEntry,
+      createdAt: new Date(),
+      tags: tags,
+      seoTags: seoTags,
+    });
+    console.log("resp", response);
     //clear temp folder
     const relativePath = "./utils/temp";
     const absolutePath = path.resolve(relativePath);
@@ -108,14 +108,23 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
   }
 });
 
+const createTagsPromiseAll = async (tags) => {
+  return Promise.all(tags.map((tag) => createTag(tag)));
+};
+
+const createTag = async (tag) => {
+  const newTag = await Tags.create({ name: tag });
+  return newTag.dataValues.id;
+};
 router.post("/blogmanage/updateentry", verifyJWT, async (req, res) => {
   const blogId = req.body.id;
   const entryToUpdate = req.body.entryToUpdate;
   const title = req.body.title;
   const tags = req.body.tags;
+  const seoTags = req.body.seoTags;
   try {
     await Blogpost.update(
-      { title: title, content: entryToUpdate, tags: tags },
+      { title: title, content: entryToUpdate, tags: tags, seoTags: seoTags },
       { where: { id: blogId } }
     );
 
@@ -264,7 +273,7 @@ router.post("/blogmanage/saveNewTag", verifyJWT, async (req, res) => {
 });
 router.post("/blogmanage/deleteTag", verifyJWT, async (req, res) => {
   const newTag = req.body;
-  console.log(newTag)
+  console.log(newTag);
   try {
     await Tags.destroy({ where: { id: newTag } });
     res.status(200).json({ msg: "success", body: true });

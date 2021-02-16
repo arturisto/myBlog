@@ -40,8 +40,12 @@ class LocalView extends Component {
 
   async componentDidMount() {
     const tags = await getAllTags();
-    const data = await getEntriesByType("local", this.state.currentPage);
-    console.log(data.entries);
+
+    const data = await getEntriesByType(
+      "local",
+      this.state.currentPage,
+      this.state.tagsClicked
+    );
     if (tags && data.entries) {
       this.setState({
         tags: tags.body,
@@ -53,18 +57,23 @@ class LocalView extends Component {
     }
   }
 
-  handleOnTagClick(tagId) {
+  async handleOnTagClick(tagId) {
     const index = this.state.tagsClicked.indexOf(tagId);
     let newArray = [];
     if (index !== -1) {
-      newArray = this.state.tagsClicked;
+      //tag was unclicked
+      newArray = [...this.state.tagsClicked];
       newArray.splice(index, 1);
     } else {
-      newArray = this.state.tagsClicked;
-      newArray.push(tagId);
+      //tag was clicked
+      newArray = [...this.state.tagsClicked, tagId];
     }
+    const data = await getEntriesByType("local", 1, newArray);
     this.setState({
       tagsClicked: newArray,
+      currentPage: 1,
+      entries: data.entries,
+      maxPages: Math.ceil(data.maxEntries / 5),
     });
   }
   handleBackToTop() {
@@ -103,7 +112,11 @@ class LocalView extends Component {
       default:
         newPageNumber = 1;
     }
-    const data = await getEntriesByType("local", newPageNumber);
+    const data = await getEntriesByType(
+      "local",
+      newPageNumber,
+      this.state.tagsClicked
+    );
     this.setState({
       entries: data.entries,
       maxPages: Math.ceil(data.maxEntries / 5),
@@ -119,7 +132,7 @@ class LocalView extends Component {
           <div className="col pr-0 pl-0 w-75 m-auto h-100">
             <TagsNavBar
               tags={this.state.tags}
-              tagsClicked={this.state.tagsClicked}
+              clickedTags={this.state.tagsClicked}
               onClick={(tagId) => this.handleOnTagClick(tagId)}
             ></TagsNavBar>
             <LocalViewList entries={this.state.entries}></LocalViewList>

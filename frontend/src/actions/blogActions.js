@@ -20,7 +20,7 @@ const getLatestBlogs = async () => {
   }
 };
 
-const getEntriesByType = async (type, pageNumber) => {
+const getEntriesByType = async (type, pageNumber, tags) => {
   const baseUrl = getBaseUrl();
   const url = baseUrl + "blog/getEntriesByType";
 
@@ -31,6 +31,7 @@ const getEntriesByType = async (type, pageNumber) => {
     body: {
       entryType: type,
       pageNumber: pageNumber,
+      tags: tags,
     },
   };
   try {
@@ -43,4 +44,23 @@ const getEntriesByType = async (type, pageNumber) => {
   }
 };
 
-export { getLatestBlogs, getEntriesByType };
+const getSingleBlogEntry = async (entryId) => {
+  try {
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "blog/getnewentry?blogId=" + entryId;
+
+    const result = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": localStorage.getItem("token"),
+      },
+    });
+    const returnData = await result.json();
+    return returnData;
+  } catch (error) {
+    return error;
+  }
+};
+
+export { getLatestBlogs, getEntriesByType, getSingleBlogEntry };

@@ -30,10 +30,13 @@ const blogpost = db.define("blogpost", {
     type: Sequelize.INTEGER,
   },
   tags: {
-    type: Sequelize.ARRAY(Sequelize.TEXT),
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
   },
   entryType: {
     type: Sequelize.CHAR,
+  },
+  seoTags: {
+    type: Sequelize.ARRAY(Sequelize.TEXT),
   },
 });
 

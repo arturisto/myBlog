@@ -3,12 +3,18 @@ import { PAGINATIONTYPE } from "../../utils/enums";
 
 const createPagination = (activeItem, maxPages, clickFunction) => {
   let paginationItems = [];
-  const revisedMaxPages = Math.max(1, maxPages-4)
-  const startPagination = Math.min(revisedMaxPages,activeItem > 2 ? activeItem - 2 : 1);
-  const endPagination = Math.max(
-    5,
-    activeItem < maxPages - 2 ? activeItem + 2 : maxPages
+  const revisedMaxPages = Math.max(1, maxPages - 4);
+  const startPagination = Math.min(
+    revisedMaxPages,
+    activeItem > 2 ? activeItem - 2 : 1
   );
+  const endPagination = Math.min(
+    maxPages,
+    Math.max(5, activeItem < maxPages - 2 ? activeItem + 2 : maxPages)
+  );
+  // const endPagination = activeItem < maxPages - 2 ? activeItem + 2 : maxPages;
+
+  console.log(endPagination);
   for (let i = startPagination; i <= endPagination; i++) {
     paginationItems.push(
       activeItem === i ? (
@@ -31,6 +37,7 @@ const createPagination = (activeItem, maxPages, clickFunction) => {
       )
     );
   }
+
   return paginationItems;
 };
 

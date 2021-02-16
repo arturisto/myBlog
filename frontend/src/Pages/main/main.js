@@ -16,7 +16,7 @@ import Footer from "../../containers/Footer/Footer";
 //components
 import MiddleHeadline from "../../components/middleHeadline/middleHeadline";
 import BackToTop from "../../components/buttons/backToTop/backToTop";
-import Carusel from "../../components/imageCarusel/carusel"
+import Carusel from "../../components/imageCarusel/carusel";
 //bootstrap items
 import Button from "react-bootstrap/Button";
 //styles
@@ -83,6 +83,7 @@ class Main extends Component {
     };
     this.scollers = scrollers;
     this.handleBackToTop = this.handleBackToTop.bind(this);
+    this.handleRoute = this.handleRoute.bind(this);
   }
 
   async componentDidMount() {
@@ -92,7 +93,10 @@ class Main extends Component {
     });
   }
 
-  handleBackToTop (){
+  handleRoute(link) {
+    this.props.history.push(link);
+  }
+  handleBackToTop() {
     scroll.scrollToTop();
   }
 
@@ -104,7 +108,11 @@ class Main extends Component {
           <div className="intro">Mr and Mrs Eat</div>
           {/* <Carusel></Carusel> */}
           <div className="banner">
-          <img className="banner-img" src="https://mrandmrseatmedia.s3.us-east-2.amazonaws.com/banner.jpg" alt=""/>
+            <img
+              className="banner-img"
+              src="https://mrandmrseatmedia.s3.us-east-2.amazonaws.com/banner.jpg"
+              alt=""
+            />
           </div>
           <div className="mainIntroWrapper">
             <WelcomeNav scorller={this.scollers}></WelcomeNav>
@@ -114,7 +122,11 @@ class Main extends Component {
               <MiddleHeadline id="latest" text="כתבות אחרונות"></MiddleHeadline>
               <Element name="latest"></Element>
               <CardTrio data={this.state.latestBlogs}></CardTrio>
-              <Button variant="primary" size="lg">
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => this.handleRoute("/local")}
+              >
                 לכל הכתבות
               </Button>
             </div>
@@ -160,7 +172,7 @@ class Main extends Component {
             </div> */}
           </div>
         </div>
-        <BackToTop onBackToTop={()=>this.handleBackToTop()}></BackToTop>
+        <BackToTop onBackToTop={() => this.handleBackToTop()}></BackToTop>
         <Footer></Footer>
       </div>
     );

@@ -62,12 +62,13 @@ const signup = async (name, username, password) => {
     return false;
   }
 };
-const saveBlog = async (newEntry, title, tags) => {
+const saveBlog = async (newEntry, title, tags, seoTags) => {
   try {
     const data = {
       newBlogEntry: newEntry,
       title: title,
       tags: tags,
+      seoTags: seoTags,
     };
     const baseUrl = getBaseUrl();
     const url = baseUrl + "user/blogmanage/savenewentry";
@@ -87,13 +88,14 @@ const saveBlog = async (newEntry, title, tags) => {
   }
 };
 
-const updateBlog = async (updatedEntry, title, blogId, tags) => {
+const updateBlog = async (updatedEntry, title, blogId, tags, seoTags) => {
   try {
     const data = {
       entryToUpdate: updatedEntry,
       title: title,
       id: blogId,
       tags: tags,
+      seoTags: seoTags,
     };
     const baseUrl = getBaseUrl();
     const url = baseUrl + "user/blogmanage/updateentry";
@@ -115,7 +117,6 @@ const updateBlog = async (updatedEntry, title, blogId, tags) => {
 
 const getSingleBlogEntry = async (entryId) => {
   try {
-    console.log("hiiii");
     const baseUrl = getBaseUrl();
     const url = baseUrl + "user/blogmanage/getnewentry?blogId=" + entryId;
 
@@ -289,7 +290,7 @@ const saveNewTag = async (tag) => {
 };
 const deleteTag = async (tags) => {
   try {
-    console.log(tags)
+    console.log(tags);
     const baseUrl = getBaseUrl();
     const url = baseUrl + "user/blogmanage/deleteTag";
     const token = localStorage.getItem("token");

@@ -14,7 +14,7 @@ import "./blogPage.scss";
 import BlogPost from "./blogPost/blogPost";
 
 //actions
-import { getSingleBlogEntry } from "../../actions/userActions";
+import { getSingleBlogEntry } from "../../actions/blogActions";
 //***** main *****//
 
 class BlogPage extends Component {
@@ -22,8 +22,7 @@ class BlogPage extends Component {
     super(props);
     this.state = {
       blogData: false,
-      isPreview:false,
-  
+      isPreview: false,
     };
   }
 
@@ -38,7 +37,7 @@ class BlogPage extends Component {
   render() {
     return (
       <Fragment>
-       <Navbar></Navbar>
+        <Navbar></Navbar>
         <Row className="ml-5">
           {/* <Col lg = {3}>
                 <LeftSideBar text = {this.state.fillerText} />  

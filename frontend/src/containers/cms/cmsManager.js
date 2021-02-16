@@ -3,13 +3,12 @@ import React, { Fragment, Component } from "react";
 import CreatePost from "./createPost";
 import ViewPosts from "./viewPosts";
 import ViewTags from "./viewTags";
-
+import TagsNavBar from "../../components/tagsNavBar/tagsNavBar";
 //components
 import CmsMainScreenToolBar from "../../components/cmsManagerNav/cmsMainScreenToolBar";
 import Modal from "../../components/modals/Modal";
 //boostrap items
 import Button from "react-bootstrap/Button";
-
 //styles
 import "./cmsComponent.scss";
 //actions
@@ -27,7 +26,7 @@ import {
 } from "../../actions/userActions";
 //utilites
 import { CMSVIEWMODES, CMSTABS } from "../../utils/enums";
-
+import { stringToArray } from "../../utils/helperFunctions";
 class CmsManager extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +48,8 @@ class CmsManager extends Component {
       tags: [],
       checkedTags: [],
       tagMode: "view",
-      tagInput:""
+      tagInput: "",
+      seoTagsInput: "",
     };
     //binds
     this.toggleView = this.toggleView.bind(this);
@@ -61,6 +61,7 @@ class CmsManager extends Component {
     this.handleClearEditor = this.handleClearEditor.bind(this);
     this.handlePreviewEditor = this.handlePreviewEditor.bind(this);
     this.handleCreateNewEntry = this.handleCreateNewEntry.bind(this);
+    this.handleOnTagClick = this.handleOnTagClick.bind(this);
 
     //Display Tab Binds
     this.handlePublish = this.handlePublish.bind(this);
@@ -85,6 +86,15 @@ class CmsManager extends Component {
     this.closeModal = this.closeModal.bind(this);
     //refs
     this.tagsInput = React.createRef();
+    this.seoTagsInput = React.createRef();
+  }
+
+  async componentDidMount() {
+    const tags = await getAllTags();
+    this.setState({
+      tags: tags.body,
+      checkedTags: [],
+    });
   }
 
   async toggleView(pane) {
@@ -106,6 +116,7 @@ class CmsManager extends Component {
   }
   handleCreateNewEntry() {
     this.tagsInput.current.value = "food";
+    this.seoTagsInput.current.value = "food";
     this.setState({
       editor: "",
       postTitle: "",
@@ -133,27 +144,24 @@ class CmsManager extends Component {
   }
 
   async handleSaveEditor() {
-    const tags = this.tagsInput.current.value;
-
-    const arrayTags =
-      tags.length >= 1
-        ? tags.split(",").map(function (tag) {
-            return tag.trim();
-          })
-        : "";
+    const tags = this.state.checkedTags;
+    console.log(tags);
+    const seoTags = stringToArray(this.seoTagsInput.current.value);
     let response;
     if (this.state.isEdit) {
       response = await updateBlog(
         this.state.editor,
         this.state.postTitle,
         this.state.entryEditId,
-        arrayTags
+        tags,
+        seoTags
       );
     } else {
       response = await saveBlog(
         this.state.editor,
         this.state.postTitle,
-        arrayTags
+        tags,
+        seoTags
       );
     }
 
@@ -161,11 +169,12 @@ class CmsManager extends Component {
       this.setState({
         modalStatus: true,
         modalTitle: "Success",
-        modalText: "YOu have succedded",
+        modalText: "YOu have succeeded",
         editor: "",
         postTitle: "",
         isEdit: false,
         entryEditId: "",
+        checkedTags: [],
       });
     } else {
       this.setState({
@@ -180,6 +189,7 @@ class CmsManager extends Component {
     this.setState({
       editorToClear: true,
       postTitle: "",
+      checkedTags: [],
     });
   }
   handlePreviewEditor() {
@@ -225,7 +235,7 @@ class CmsManager extends Component {
     const id = this.state.checkedItems[0];
     if (length === 0) {
       this.setState({
-        modaStatus: true,
+        modalStatus: true,
         modalTitle: "Wrong Selection",
         modalText: "Please choose one item",
         modalType: "error",
@@ -246,10 +256,11 @@ class CmsManager extends Component {
           activeTab: CMSTABS.CREATE,
           isEdit: true,
           entryEditId: id,
+          checkedTags: reply.body.tags,
         });
 
-        const tagsToDisplay = reply.body.tags.join(", ");
-        this.tagsInput.current.value = tagsToDisplay;
+        const tagsToDisplay = reply.body.seoTags?.join(", ");
+        this.seoTagsInput.current.value = tagsToDisplay;
       } else {
         this.setState({
           modalStatus: true,
@@ -356,16 +367,15 @@ class CmsManager extends Component {
       tagMode: "create",
     });
   }
-  handleTagEdit(event){
+  handleTagEdit(event) {
     this.setState({
-      tagInput:event.target.value
-    })
+      tagInput: event.target.value,
+    });
   }
   async handleSaveNewTag() {
     console.log("save");
-    const reply =await saveNewTag(this.state.tagInput);
-    this.raiseTagsModal(reply,"save")
-    
+    const reply = await saveNewTag(this.state.tagInput);
+    this.raiseTagsModal(reply, "save");
   }
   handleDeleteTags() {
     console.log("delete");
@@ -373,19 +383,18 @@ class CmsManager extends Component {
     this.raiseTagsModal(reply, "delete");
   }
 
-  raiseTagsModal(reply, text){
+  raiseTagsModal(reply, text) {
     if (reply) {
       this.setState({
-        tagsInput:"",
+        tagsInput: "",
         modalStatus: true,
         modalTitle: "Success",
-        modalText: "Tag is "+text,
+        modalText: "Tag is " + text,
         modalType: "error",
       });
-    }
-    else{
+    } else {
       this.setState({
-        tagsInput:"",
+        tagsInput: "",
         modalStatus: true,
         modalTitle: "Error",
         modalText: "Error",
@@ -414,6 +423,24 @@ class CmsManager extends Component {
       modalText: "",
     });
   }
+
+  async handleOnTagClick(tagId) {
+    const index = this.state.checkedTags.indexOf(tagId);
+    let newArray = [];
+    if (index !== -1) {
+      //tag was unclicked
+      newArray = [...this.state.checkedTags];
+      newArray.splice(index, 1);
+    } else {
+      //tag was clicked
+      newArray = [...this.state.checkedTags, tagId];
+    }
+    this.setState({
+      checkedTags: newArray,
+    });
+  }
+
+  /************************************************* */
   render() {
     return (
       <Fragment>
@@ -488,17 +515,22 @@ class CmsManager extends Component {
                   editorValue={this.state.editor}
                 ></CreatePost>
                 <div className="tags-wrapper m-auto p-3 w-75">
-                  <label htmlFor="tags" className="mr-3">
-                    <strong>Tags:</strong>
+                  <label htmlFor="seoTags" className="mr-3">
+                    <strong>SEO tag:</strong>
                   </label>
                   <input
-                    ref={this.tagsInput}
+                    ref={this.seoTagsInput}
                     type="text"
-                    key="tags"
-                    id="tags"
+                    key="seoTags"
+                    id="seoTags"
                     className="w-100"
                     defaultValue="food"
                   ></input>
+                  <TagsNavBar
+                    tags={this.state.tags}
+                    clickedTags={this.state.checkedTags}
+                    onClick={(tagId) => this.handleOnTagClick(tagId)}
+                  ></TagsNavBar>
                 </div>
               </div>
             ) : (

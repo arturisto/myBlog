@@ -21,6 +21,8 @@ Areas to build:
 9. Recipes
    1.  Sub screen for list of recipes\
    2.  sub screen for a recipes\
+10. General
+    1. Add Loaders where applicable
 
 
 
@@ -49,9 +51,12 @@ Areas to build:
 3. More secure way of authentication
 4.  Add loaders
 5. Fix error handling along the route
+6. Change Tags section in CMS to TagsNavbar component
 
 
 
 ### **Features for Later:**
 
 1. Ellipsis for pagination - both previous and next
+
+   

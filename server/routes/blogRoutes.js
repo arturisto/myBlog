@@ -1,9 +1,11 @@
 //utils
 const getPreviewImageUrl = require("../utils/getPreviewImageUrl");
+const filterByTags = require("../utils/filterByTags");
 
 const express = require("express");
 const router = express.Router();
 const Blogpost = require("../models/blogpost");
+const Tags = require("../models/tags");
 
 async function getAll() {
   try {
@@ -34,26 +36,45 @@ router.get("/getlatest", async (req, res) => {
 });
 
 router.post("/getEntriesByType", async (req, res) => {
-  
   const frontEndType = req.body.body.entryType;
-  const pageNumber = req.body.body.pageNumber
+  const pageNumber = req.body.body.pageNumber;
+  const tags = req.body.body.tags;
   //if entrie type is local then show local posts, otherwise abroad posts
   const entrieType = frontEndType === "local" ? "L" : "W";
-  try {
-    const blogEntries = await Blogpost.findAll(
-      {
-        where: { entryType: entrieType },
-        order: [["publishedAt", "DESC"]],
-      },
-    );
-    const reducedBlogEntries = blogEntries.slice(pageNumber*5-5,(pageNumber*5))
-    const blogEntiresWithPreviewURLs = getPreviewImageUrl(reducedBlogEntries);
-    const maxEntries = blogEntries.length
 
-    res.status(200).json({ entries: blogEntiresWithPreviewURLs, maxEntries:maxEntries });
+  try {
+    const entriesToFilter = await Blogpost.findAll({
+      where: { entryType: entrieType },
+      order: [["publishedAt", "DESC"]],
+    });
+    console.log("**********************************");
+    const blogEntries = tags
+      ? filterByTags(tags, entriesToFilter)
+      : entriesToFilter;
+
+    const reducedBlogEntries = blogEntries.slice(
+      pageNumber * 5 - 5,
+      pageNumber * 5
+    );
+    const blogEntiresWithPreviewURLs = getPreviewImageUrl(reducedBlogEntries);
+    const maxEntries = blogEntries.length;
+
+    res
+      .status(200)
+      .json({ entries: blogEntiresWithPreviewURLs, maxEntries: maxEntries });
   } catch (error) {
     console.log(error);
     res.status(404).json({ err: error });
+  }
+});
+
+router.get("/getnewentry", async (req, res) => {
+  try {
+    const blogId = req.query.blogId;
+    const blogEntry = await Blogpost.findOne({ where: { id: blogId } });
+    res.status(200).json({ msg: "success", body: blogEntry });
+  } catch (error) {
+    console.log(error);
   }
 });
 
