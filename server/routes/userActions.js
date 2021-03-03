@@ -163,7 +163,16 @@ router.post("/blogmanage/deleteEntries", verifyJWT, async (req, res) => {
 
 router.post("/blogmanage/publishEntries", verifyJWT, async (req, res) => {
   try {
-    await Blogpost.update({ published: true }, { where: { id: req.body } });
+    const d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth() + 1; //Months are zero based
+    var curr_year = d.getFullYear();
+    const publishedAtt = curr_date + "-" + curr_month + "-" + curr_year;
+    console.log(publishedAtt);
+    await Blogpost.update(
+      { published: true, publishedAt: publishedAtt },
+      { where: { id: req.body } }
+    );
     res.status(200).json({ msg: "success" });
   } catch (error) {
     res.status(404).json({ msg: error });

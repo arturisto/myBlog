@@ -2,6 +2,7 @@
 import logo from "../../assets/images/logo.jpg";
 import "./navbar.scss";
 import Navbar from "react-bootstrap/Navbar";
+import { SocialIcon } from "react-social-icons";
 
 const dropdown_data = [
   ["תל אביב", "#"],
@@ -37,6 +38,21 @@ export default function NavigationBar() {
       >
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
+            <SocialIcon
+              url="https://www.facebook.com/mr.and.mrs.eat"
+              network="facebook"
+              style={{ height: 25, width: 25, margin: 7 }}
+            />
+          </li>
+          <li className="nav-item">
+            <SocialIcon
+              url="https://www.facebook.com/mr.and.mrs.eat"
+              network="instagram"
+              bgColor="#ff5a01"
+              style={{ height: 25, width: 25, margin: 7 }}
+            />
+          </li>
+          <li className="nav-item">
             <a className="nav-link" href="#">
               צרו קשר
             </a>
@@ -47,11 +63,22 @@ export default function NavigationBar() {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">
+            <a className="nav-link" href="/construction">
               מתכונים
             </a>
           </li>
-          <li className="nav-item dropdown">
+          <li className="nav-item">
+            <a className="nav-link" href="/construction">
+              בחול
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/local">
+              בארץ
+            </a>
+          </li>
+
+          {/* <li className="nav-item dropdown">
             <a
               className="nav-link "
               href="#"
@@ -76,14 +103,9 @@ export default function NavigationBar() {
                 אחר
               </a>
             </div>
-          </li>
+          </li> */}
           <li className="nav-item active">
-            <a className="nav-link" href="#">
-              בחו"ל <span className="sr-only">(current)</span>
-            </a>
-          </li>
-          <li className="nav-item active">
-            <a className="nav-link" href="/login">
+            <a className="nav-link" href="/secretloginurl">
               {" "}
               <span className="loginLink">LogIn</span>
             </a>

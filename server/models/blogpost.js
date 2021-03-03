@@ -18,7 +18,7 @@ const blogpost = db.define("blogpost", {
     type: Sequelize.DATE,
   },
   publishedAt: {
-    type: Sequelize.DATE,
+    type: Sequelize.TEXT,
   },
   content: {
     type: Sequelize.BLOB,

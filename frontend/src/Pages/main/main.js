@@ -9,7 +9,7 @@ import {
 } from "react-scroll";
 
 //containers
-import NavigationBar from "../../containers/NavBar/navbar";
+import Navbar from "../../containers/NavBar/navbar";
 import WelcomeNav from "./welcomeNav/welcomeNav";
 import CardTrio from "../../containers/CardTrio/CardTrio";
 import Footer from "../../containers/Footer/Footer";
@@ -103,7 +103,7 @@ class Main extends Component {
   render() {
     return (
       <div className="col pr-0 pl-0">
-        <NavigationBar> </NavigationBar>
+        {/* <Navbar /> */}
         <div className="main">
           <div className="intro">Mr and Mrs Eat</div>
           {/* <Carusel></Carusel> */}
@@ -115,13 +115,13 @@ class Main extends Component {
             />
           </div>
           <div className="mainIntroWrapper">
-            <WelcomeNav scorller={this.scollers}></WelcomeNav>
+            <WelcomeNav scorller={this.scollers} />
           </div>
           <div className="mainContentWrapper">
             <div className="subMainContentWrapper">
-              <MiddleHeadline id="latest" text="כתבות אחרונות"></MiddleHeadline>
-              <Element name="latest"></Element>
-              <CardTrio data={this.state.latestBlogs}></CardTrio>
+              <MiddleHeadline id="latest" text="כתבות אחרונות" />
+              <Element name="latest" />
+              <CardTrio data={this.state.latestBlogs} />
               <Button
                 variant="primary"
                 size="lg"
@@ -131,34 +131,25 @@ class Main extends Component {
               </Button>
             </div>
             <div className="subMainContentWrapper">
-              <MiddleHeadline
-                id="featured"
-                text="הנצפים ביותר"
-              ></MiddleHeadline>
-              <Element name="featured"></Element>
-              <CardTrio data={this.state.latestBlogs}></CardTrio>
+              <MiddleHeadline id="featured" text="הנצפים ביותר" />
+              <Element name="featured" />
+              <CardTrio data={this.state.latestBlogs} />
               <Button variant="primary" size="lg">
                 לכל הכתבות
               </Button>
             </div>
             <div className="subMainContentWrapper">
-              <MiddleHeadline
-                id="aroundTheWorld"
-                text="מסביב לעולם"
-              ></MiddleHeadline>
-              <Element name="aroundTheWorld" id="aroundTheWorld"></Element>
-              <CardTrio data={this.state.latestBlogs}></CardTrio>
+              <MiddleHeadline id="aroundTheWorld" text="מסביב לעולם" />
+              <Element name="aroundTheWorld" id="aroundTheWorld" />
+              <CardTrio data={this.state.latestBlogs} />
               <Button variant="primary" size="lg">
                 לכל הכתבות
               </Button>
             </div>
             <div className="subMainContentWrapper">
-              <MiddleHeadline
-                id="instush"
-                text="מתוך האינסטגרם שלנו"
-              ></MiddleHeadline>
-              <Element name="instush" id="instush"></Element>
-              <CardTrio data={this.state.latestBlogs}></CardTrio>
+              <MiddleHeadline id="instush" text="מתוך האינסטגרם שלנו" />
+              <Element name="instush" id="instush" />
+              <CardTrio data={this.state.latestBlogs} />
               <Button variant="primary" size="lg">
                 לכל הכתבות
               </Button>
@@ -172,8 +163,8 @@ class Main extends Component {
             </div> */}
           </div>
         </div>
-        <BackToTop onBackToTop={() => this.handleBackToTop()}></BackToTop>
-        <Footer></Footer>
+        <BackToTop onBackToTop={() => this.handleBackToTop()} />
+        {/* <Footer></Footer> */}
       </div>
     );
   }

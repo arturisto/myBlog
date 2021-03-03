@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  position:relative
+  position: relative;
 }
 
 .App-logo {
@@ -36,4 +36,7 @@
   to {
     transform: rotate(360deg);
   }
+}
+.routesMain {
+  min-height: calc(100vh - 66px - 4rem);
 }

@@ -1,7 +1,7 @@
 Areas to build:
 
 1. Restaurant Reviews (in progress)
-   1. Sub screen for view by selection criteria - area or all
+   1. Sub screen for view by selection criteria - area or all(done)
    2. Screen for blog view (in progress)
 2.  Sidebar features - tbd
 3. About section
@@ -23,6 +23,12 @@ Areas to build:
    2.  sub screen for a recipes\
 10. General
     1. Add Loaders where applicable
+11. Social Media
+    1. Facebook integration - buttons for share and for view 
+    2. Instagram Integration 
+       1.  buttons for share and view.
+       2. Add Section on the landing page to view sample of images from Instagram
+12. Build maintenance page
 
 
 

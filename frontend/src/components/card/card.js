@@ -7,20 +7,24 @@ export default function Cards(props) {
   const blogData = props.blogData;
   const content = blogData.content;
   const blogId = blogData.id;
+  const publishedOn = blogData.publishedAt;
   const baseUrl = getBaseFrontUrl(blogId);
   const postUrl = baseUrl + "blogpage/" + blogId;
   const preview = createPewviewText(content);
   return (
     <div className="card">
       <div className="card-body">
-        <div className="card-toolbar"> מתי פורסם וכאלה</div>
+        <div className="card-toolbar"> {publishedOn} :פורסם ב</div>
         <div className="card-inner-body">
           <h5 className="card-title">{blogData.title}</h5>
           <div className="card-text-wrapper">
             <div className="card-text">{Parser(preview)}</div>
           </div>
         </div>
-        <div className="card-bottom"> עוד דברים כאלה ואחרים ילכו פה</div>
+        <div className="card-bottom published-at">
+          {" "}
+          עוד דברים כאלה ואחרים ילכו פה
+        </div>
       </div>
 
       <a href={postUrl}>

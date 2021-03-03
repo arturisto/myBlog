@@ -36,8 +36,6 @@ class LoginPage extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar> </Navbar>
-
         <div className="auth-form">
           {this.state.isLoggedIn ? (
             <>

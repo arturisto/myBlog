@@ -7,8 +7,6 @@ class Cms extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar></Navbar>
-
         <CmsManager></CmsManager>
       </Fragment>
     );

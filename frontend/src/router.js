@@ -24,6 +24,11 @@ const publicRoutes = [
     exact: true,
     component: lazy(() => import("./Pages/localView/localView")),
   },
+  {
+    path: PUBLIC_ROUTE.UNDERCONSTRUCTION,
+    exact: true,
+    component: lazy(() => import("./Pages/underConstruction")),
+  },
 ];
 
 const privateRoutes = [

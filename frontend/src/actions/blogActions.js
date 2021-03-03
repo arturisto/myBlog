@@ -63,4 +63,21 @@ const getSingleBlogEntry = async (entryId) => {
   }
 };
 
-export { getLatestBlogs, getEntriesByType, getSingleBlogEntry };
+const subscribe = async (email) => {
+  try {
+    const baseUrl = getBaseUrl();
+    const url = baseUrl + "blog/subscribe";
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export { getLatestBlogs, getEntriesByType, getSingleBlogEntry, subscribe };

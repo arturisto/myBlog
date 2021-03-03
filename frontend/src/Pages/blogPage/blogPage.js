@@ -2,10 +2,9 @@
 import React, { Fragment, Component } from "react";
 //Containers
 import Navbar from "../../containers/NavBar/navbar";
-import LeftSideBar from "../../containers/LeftSideBar/leftSideBar";
 import RightSideBar from "../../containers/RightSideBar/rightSideBar";
+import Footer from "../../containers/Footer/Footer";
 //Components
-import LayoutWrapper from "../../components/layoutWrapper/layoutWrapper";
 //Style & Bootstrap
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -37,16 +36,15 @@ class BlogPage extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar></Navbar>
         <Row className="ml-5">
           {/* <Col lg = {3}>
                 <LeftSideBar text = {this.state.fillerText} />  
                 </Col> */}
           <Col lg={8}>
-            <BlogPost blogData={this.state.blogData}></BlogPost>
+            <BlogPost blogData={this.state.blogData} />
           </Col>
           <Col lg={3}>
-            <RightSideBar text={this.state.fillerText}></RightSideBar>
+            <RightSideBar />
           </Col>
         </Row>
       </Fragment>

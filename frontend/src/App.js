@@ -1,10 +1,15 @@
-import './App.css';
-import Routes from './router';
-
+import "./App.css";
+import Routes from "./router";
+import Footer from "./containers/Footer/Footer";
+import Navbar from "./containers/NavBar/navbar";
 function App() {
   return (
     <div className="App">
-      <Routes></Routes>
+      <Navbar />
+      <div className="routesMain">
+        <Routes />
+      </div>
+      <Footer />
     </div>
   );
 }

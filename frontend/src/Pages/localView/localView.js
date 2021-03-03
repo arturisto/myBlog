@@ -127,15 +127,15 @@ class LocalView extends Component {
   render() {
     return (
       <Fragment>
-        <NavigationBar> </NavigationBar>
+        {/* <NavigationBar> </NavigationBar> */}
         <div className="localView-main">
           <div className="col pr-0 pl-0 w-75 m-auto h-100">
             <TagsNavBar
               tags={this.state.tags}
               clickedTags={this.state.tagsClicked}
               onClick={(tagId) => this.handleOnTagClick(tagId)}
-            ></TagsNavBar>
-            <LocalViewList entries={this.state.entries}></LocalViewList>
+            />
+            <LocalViewList entries={this.state.entries} />
             <div className="pagination m-auto">
               <Pagination
                 activeItem={this.state.currentPage}
@@ -143,13 +143,13 @@ class LocalView extends Component {
                 clickFunction={(value, type) =>
                   this.handlePaginationClick(value, type)
                 }
-              ></Pagination>
+              />
             </div>
           </div>
 
-          <BackToTop onBackToTop={() => this.handleBackToTop()}></BackToTop>
+          <BackToTop onBackToTop={() => this.handleBackToTop()} />
         </div>
-        <Footer></Footer>
+        {/* <Footer></Footer> */}
       </Fragment>
     );
   }

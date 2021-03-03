@@ -6,6 +6,9 @@ const express = require("express");
 const router = express.Router();
 const Blogpost = require("../models/blogpost");
 const Tags = require("../models/tags");
+const Subscribers = require("../models/subscribers");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 async function getAll() {
   try {
@@ -24,10 +27,14 @@ router.post("/", (req, res) => {
 router.get("/getlatest", async (req, res) => {
   try {
     const blogEntries = await Blogpost.findAll({
+      where: {
+        publishedAt: {
+          [Op.ne]: null,
+        },
+      },
       limit: 3,
       order: [["publishedAt", "DESC"]],
     });
-
     const blogEntiresWithPreviewURLs = getPreviewImageUrl(blogEntries);
     res.status(200).json({ posts: blogEntiresWithPreviewURLs });
   } catch (error) {
@@ -75,6 +82,20 @@ router.get("/getnewentry", async (req, res) => {
     res.status(200).json({ msg: "success", body: blogEntry });
   } catch (error) {
     console.log(error);
+    res.status(404).json({ err: error });
+  }
+});
+
+router.post("/subscribe", async (req, res) => {
+  const userEmail = req.body.email;
+  try {
+    const reply = await Subscribers.create({
+      email: userEmail,
+    });
+    res.status(200).json({ msg: "ok" });
+  } catch (error) {
+    console.log("error", error);
+    res.status(403).json({ err: error });
   }
 });
 
