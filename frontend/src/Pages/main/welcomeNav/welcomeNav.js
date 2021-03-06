@@ -1,4 +1,4 @@
-import React, {Fragment } from "react";
+import React, { Fragment } from "react";
 import "./welcomeNav.scss";
 import { Navbar, Nav } from "react-bootstrap";
 
@@ -22,7 +22,10 @@ export default function WelcomeAbout(props) {
                   <div className ="nav-item"> מתוך האינטסגרם</div>
               </div> */}
       <Navbar collapseOnSelect expand="lg" className="mt-2">
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Toggle
+          aria-controls="responsive-navbar-nav"
+          className="m-auto"
+        />
         <Navbar.Collapse id="responsive-navbar-nav">
           {width >= 992 ? (
             <Nav className="mr-auto">
@@ -36,9 +39,9 @@ export default function WelcomeAbout(props) {
             </Nav>
           ) : (
             <Nav className="mr-auto">
-             <Nav.Link>{links.new}</Nav.Link>
-             <Nav.Link>{links.featured}</Nav.Link>
-             <Nav.Link>{links.world}</Nav.Link>
+              <Nav.Link>{links.new}</Nav.Link>
+              <Nav.Link>{links.featured}</Nav.Link>
+              <Nav.Link>{links.world}</Nav.Link>
               <Nav.Link>{links.instagram}</Nav.Link>
             </Nav>
           )}
