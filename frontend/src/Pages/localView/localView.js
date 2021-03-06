@@ -30,22 +30,26 @@ class LocalView extends Component {
       pagination: [],
       currentPage: 1,
       maxPages: 1,
+      mobileViewNumberOfEntries: 5,
+      isMobileView: window.innerHeigh > 1024 ? true : false,
+      lastScrollY: window.scrollY,
     };
     this.handleOnTagClick = this.handleOnTagClick.bind(this);
     this.handleBackToTop = this.handleBackToTop.bind(this);
-
     //pagination handlers
     this.handlePaginationClick = this.handlePaginationClick.bind(this);
+    //show more items handlers
+    this.getNextItemsMobile = this.getNextItemsMobile.bind(this);
   }
 
   async componentDidMount() {
     const tags = await getAllTags();
-
     const data = await getEntriesByType(
       "local",
       this.state.currentPage,
       this.state.tagsClicked
     );
+
     if (tags && data.entries) {
       this.setState({
         tags: tags.body,
@@ -124,6 +128,17 @@ class LocalView extends Component {
     });
   }
 
+  async getNextItemsMobile() {
+    const tagsClicked = this.state.tagsClicked;
+    const nextPage = this.state.currentPage + 1;
+    const data = await getEntriesByType("local", nextPage, tagsClicked);
+    this.setState({
+      currentPage: nextPage,
+      entries: this.state.entries.concat(data.entries),
+      lastScrollY: window.scrollY,
+    });
+  }
+
   render() {
     return (
       <Fragment>
@@ -137,13 +152,24 @@ class LocalView extends Component {
             />
             <LocalViewList entries={this.state.entries} />
             <div className="pagination m-auto">
-              <Pagination
-                activeItem={this.state.currentPage}
-                maxPages={this.state.maxPages}
-                clickFunction={(value, type) =>
-                  this.handlePaginationClick(value, type)
-                }
-              />
+              {this.state.isMobileView ? (
+                <Pagination
+                  activeItem={this.state.currentPage}
+                  maxPages={this.state.maxPages}
+                  clickFunction={(value, type) =>
+                    this.handlePaginationClick(value, type)
+                  }
+                />
+              ) : (
+                <div className="show-me-more">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => this.getNextItemsMobile()}
+                  >
+                    תראה לי עוד
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

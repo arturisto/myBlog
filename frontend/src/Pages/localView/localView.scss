@@ -1,13 +1,17 @@
-.localView-main{
-    position:relative;
-    min-height:calc(100vh - 151px);
+.localView-main {
+  position: relative;
+  min-height: calc(100vh - 151px);
 }
-.pagination{
-    max-width:350px;
+.pagination {
+  max-width: 350px;
 }
-.back-to-top{
-    position:fixed;
-    bottom:50px;
-    right:20px;
-    z-index:5;
+.back-to-top {
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  z-index: 5;
+}
+
+.show-me-more {
+  margin: auto;
 }

@@ -6,8 +6,7 @@ export default function CardTrio(props) {
   const blogPosts = props.data;
   return (
     <Fragment>
-      <div className="cardTrio col w-75 m-auto">
-
+      <div className="cardTrio">
         {blogPosts.map(function (item, i) {
           return <Card blogData={item}></Card>;
         })}

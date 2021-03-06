@@ -9,14 +9,11 @@ import {
 } from "react-scroll";
 
 //containers
-import Navbar from "../../containers/NavBar/navbar";
 import WelcomeNav from "./welcomeNav/welcomeNav";
 import CardTrio from "../../containers/CardTrio/CardTrio";
-import Footer from "../../containers/Footer/Footer";
 //components
 import MiddleHeadline from "../../components/middleHeadline/middleHeadline";
 import BackToTop from "../../components/buttons/backToTop/backToTop";
-import Carusel from "../../components/imageCarusel/carusel";
 //bootstrap items
 import Button from "react-bootstrap/Button";
 //styles
@@ -103,7 +100,6 @@ class Main extends Component {
   render() {
     return (
       <div className="col pr-0 pl-0">
-        {/* <Navbar /> */}
         <div className="main">
           <div className="intro">Mr and Mrs Eat</div>
           {/* <Carusel></Carusel> */}
@@ -164,7 +160,6 @@ class Main extends Component {
           </div>
         </div>
         <BackToTop onBackToTop={() => this.handleBackToTop()} />
-        {/* <Footer></Footer> */}
       </div>
     );
   }

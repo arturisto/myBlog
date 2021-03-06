@@ -1,4 +1,14 @@
-.cardTrio{
+.cardTrio {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
 
-   
+@media (max-width: 768px) {
+  .cardTrio {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+  }
 }

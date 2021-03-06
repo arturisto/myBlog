@@ -5,6 +5,7 @@
   margin: auto auto 25px auto;
   width: 80%;
 }
+
 .card img {
   transition: 0.5s ease-in-out;
   height: auto;
@@ -43,4 +44,21 @@
 }
 .card-toolbar {
   font-size: 0.75rem;
+}
+
+@media (max-width: 1024px) {
+  .card {
+    flex-direction: column;
+    width: 100%;
+  }
+  .card-body {
+    text-align: right;
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+  }
+  .card img {
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+  }
 }
