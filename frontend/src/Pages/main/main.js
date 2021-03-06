@@ -14,6 +14,7 @@ import CardTrio from "../../containers/CardTrio/CardTrio";
 //components
 import MiddleHeadline from "../../components/middleHeadline/middleHeadline";
 import BackToTop from "../../components/buttons/backToTop/backToTop";
+import BasicLoader from "../../components/loaders/basicLoader";
 //bootstrap items
 import Button from "react-bootstrap/Button";
 //styles
@@ -77,6 +78,7 @@ class Main extends Component {
     super(props);
     this.state = {
       latestBlogs: [],
+      isLatestLoading: true,
     };
     this.scollers = scrollers;
     this.handleBackToTop = this.handleBackToTop.bind(this);
@@ -87,6 +89,7 @@ class Main extends Component {
     const latestBlogs = await getLatestBlogs();
     this.setState({
       latestBlogs: latestBlogs,
+      isLatestLoading: false,
     });
   }
 
@@ -102,7 +105,6 @@ class Main extends Component {
       <div className="col pr-0 pl-0">
         <div className="main">
           <div className="intro">Mr and Mrs Eat</div>
-          {/* <Carusel></Carusel> */}
           <div className="banner">
             <img
               className="banner-img"
@@ -117,7 +119,12 @@ class Main extends Component {
             <div className="subMainContentWrapper">
               <MiddleHeadline id="latest" text="כתבות אחרונות" />
               <Element name="latest" />
-              <CardTrio data={this.state.latestBlogs} />
+              {this.state.isLatestLoading ? (
+                <BasicLoader />
+              ) : (
+                <CardTrio data={this.state.latestBlogs} />
+              )}
+
               <Button
                 variant="primary"
                 size="lg"

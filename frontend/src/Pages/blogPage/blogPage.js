@@ -1,10 +1,9 @@
 //*****imports******//
 import React, { Fragment, Component } from "react";
 //Containers
-import Navbar from "../../containers/NavBar/navbar";
 import RightSideBar from "../../containers/RightSideBar/rightSideBar";
-import Footer from "../../containers/Footer/Footer";
 //Components
+import BasicLoader from "../../components/loaders/basicLoader";
 //Style & Bootstrap
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -22,6 +21,7 @@ class BlogPage extends Component {
     this.state = {
       blogData: false,
       isPreview: false,
+      isLoading: true,
     };
   }
 
@@ -31,6 +31,7 @@ class BlogPage extends Component {
     console.log(blogEntry.body);
     this.setState({
       blogData: blogEntry.body,
+      isLoading: false,
     });
   }
   render() {
@@ -41,7 +42,11 @@ class BlogPage extends Component {
                 <LeftSideBar text = {this.state.fillerText} />  
                 </Col> */}
           <Col lg={8}>
-            <BlogPost blogData={this.state.blogData} />
+            {this.state.isLoading ? (
+              <BasicLoader />
+            ) : (
+              <BlogPost blogData={this.state.blogData} />
+            )}
           </Col>
           <Col lg={3}>
             <RightSideBar />

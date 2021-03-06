@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { PUBLIC_ROUTE } from "./router.constants";
 import PrivateRoute from "./components/routes/privateRoute";
+import BasicLoader from "./components/loaders/basicLoader";
 
 const publicRoutes = [
   {
@@ -41,7 +42,7 @@ const privateRoutes = [
 
 export default function Routes() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={""}>
       <Router>
         <Switch>
           {publicRoutes.map((route, index) => (

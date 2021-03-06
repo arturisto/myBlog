@@ -2,14 +2,13 @@
 import React, { Fragment, Component } from "react";
 import { animateScroll as scroll } from "react-scroll";
 //Containers
-import NavigationBar from "../../containers/NavBar/navbar";
 import LocalViewList from "../../containers/blogLists/localViewList";
-
 //components
 import TagsNavBar from "../../components/tagsNavBar/tagsNavBar";
 import { Paging as Pagination } from "../../components/pagination/pagination";
 import BackToTop from "../../components/buttons/backToTop/backToTop";
-import Footer from "../../containers/Footer/Footer";
+import BasicLoader from "../../components/loaders/basicLoader";
+import ButtonLoader from "../../components/loaders/buttonLoader";
 //Style & Bootstrap
 import "./localView.scss";
 //utilities
@@ -31,8 +30,10 @@ class LocalView extends Component {
       currentPage: 1,
       maxPages: 1,
       mobileViewNumberOfEntries: 5,
-      isMobileView: window.innerHeigh > 1024 ? true : false,
+      isMobileView: window.innerWidth < 1024 ? true : false,
       lastScrollY: window.scrollY,
+      isPageLoading: true,
+      buttonLoader: false,
     };
     this.handleOnTagClick = this.handleOnTagClick.bind(this);
     this.handleBackToTop = this.handleBackToTop.bind(this);
@@ -55,6 +56,7 @@ class LocalView extends Component {
         tags: tags.body,
         entries: data.entries,
         maxPages: Math.ceil(data.maxEntries / 5),
+        isPageLoading: false,
       });
     } else {
       console.log("error");
@@ -129,17 +131,25 @@ class LocalView extends Component {
   }
 
   async getNextItemsMobile() {
+    this.setState({
+      buttonLoader: true,
+    });
     const tagsClicked = this.state.tagsClicked;
     const nextPage = this.state.currentPage + 1;
     const data = await getEntriesByType("local", nextPage, tagsClicked);
+
     this.setState({
       currentPage: nextPage,
       entries: this.state.entries.concat(data.entries),
       lastScrollY: window.scrollY,
+      buttonLoader: false,
     });
   }
 
   render() {
+    console.log(this.state.isMobileView);
+
+    if (this.state.isPageLoading) return <BasicLoader />;
     return (
       <Fragment>
         {/* <NavigationBar> </NavigationBar> */}
@@ -152,7 +162,7 @@ class LocalView extends Component {
             />
             <LocalViewList entries={this.state.entries} />
             <div className="pagination m-auto">
-              {this.state.isMobileView ? (
+              {!this.state.isMobileView ? (
                 <Pagination
                   activeItem={this.state.currentPage}
                   maxPages={this.state.maxPages}
@@ -162,17 +172,20 @@ class LocalView extends Component {
                 />
               ) : (
                 <div className="show-me-more">
-                  <button
-                    className="btn btn-success"
-                    onClick={() => this.getNextItemsMobile()}
-                  >
-                    תראה לי עוד
-                  </button>
+                  {this.state.buttonLoader ? (
+                    <ButtonLoader type="btn-warning" />
+                  ) : (
+                    <button
+                      className="btn btn-success"
+                      onClick={() => this.getNextItemsMobile()}
+                    >
+                      תראה לי עוד
+                    </button>
+                  )}
                 </div>
               )}
             </div>
           </div>
-
           <BackToTop onBackToTop={() => this.handleBackToTop()} />
         </div>
         {/* <Footer></Footer> */}
