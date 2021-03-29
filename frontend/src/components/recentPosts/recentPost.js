@@ -23,7 +23,7 @@ function RecentPost(props) {
               </div>
             </div>
             <div className="card-bottom published-at ">
-              Published {post.publishedAt} 19.12.12
+              Published {post.publishedAt}
             </div>
           </div>
         </div>

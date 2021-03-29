@@ -1,3 +1,12 @@
-.border{
-    border: 1px solid black
+.border {
+  border: 1px solid black;
+}
+.blogPageMain {
+  margin-left: 50px;
+}
+
+@media (max-width: 1024px) {
+  .blogPageMain {
+    margin-left: 0px;
+  }
 }

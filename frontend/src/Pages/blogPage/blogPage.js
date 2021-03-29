@@ -37,7 +37,7 @@ class BlogPage extends Component {
   render() {
     return (
       <Fragment>
-        <Row className="ml-5">
+        <Row className="blogPageMain">
           {/* <Col lg = {3}>
                 <LeftSideBar text = {this.state.fillerText} />  
                 </Col> */}
