@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "dependencies": {
     "aws-sdk": "^2.820.0",
     "bcrypt": "^5.0.0",
@@ -27,7 +27,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "server": "http-server -p 8000 D:\\"
+    "server": "http-server -p 8000 D:\\",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
