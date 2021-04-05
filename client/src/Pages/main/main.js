@@ -86,6 +86,7 @@ class Main extends Component {
   }
 
   async componentDidMount() {
+    console.log("try to load on main");
     const latestBlogs = await getLatestBlogs();
     this.setState({
       latestBlogs: latestBlogs,
@@ -115,7 +116,8 @@ class Main extends Component {
           <div className="mainIntroWrapper">
             <WelcomeNav scorller={this.scollers} />
           </div>
-          <div className="mainContentWrapper">
+
+          {/* <div className="mainContentWrapper">
             <div className="subMainContentWrapper">
               <MiddleHeadline id="latest" text="כתבות אחרונות" />
               <Element name="latest" />
@@ -157,14 +159,14 @@ class Main extends Component {
                 לכל הכתבות
               </Button>
             </div>
-            {/* <div className="subMainContentWrapper">
+            <div className="subMainContentWrapper">
               <MiddleHeadline text="Top Travel Destinations"></MiddleHeadline>
               <CardTrio></CardTrio>
               <Button variant="primary" size="lg">
                 More Destination
               </Button>
-            </div> */}
-          </div>
+            </div> 
+          </div> */}
         </div>
         <BackToTop onBackToTop={() => this.handleBackToTop()} />
       </div>
