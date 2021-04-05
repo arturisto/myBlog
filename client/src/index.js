@@ -8,9 +8,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 ReactDOM.render(
   <React.StrictMode>
-    {console.log("before app")}
     <App />
-    {console.log("after app")}
   </React.StrictMode>,
   document.getElementById("root")
 );
