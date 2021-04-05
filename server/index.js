@@ -37,9 +37,9 @@ const jwt = require("jsonwebtoken");
 app.use("/", routes);
 
 const PORT = process.env.PORT || 5000;
-
+console.log("hi before test");
 app.listen(PORT, () => {
   console.log("server on port 5000");
 });
-
+console.log("hi after test");
 module.exports = app;
