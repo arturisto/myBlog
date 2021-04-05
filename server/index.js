@@ -21,7 +21,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(cors());
 app.use(
   sess({
-    secret: process.env["SESSION_KEY"],
+    secret: process.env["SECRET_SESSION "],
     resave: false,
     saveUninitialized: false,
   })
