@@ -4,9 +4,9 @@ const cors = require("cors");
 const routes = require("./routes");
 const sess = require("express-session");
 //database
-
+console.log("hi before db");
 const db = require("./config/db");
-
+console.log("hi after db");
 // //testDB
 
 db.authenticate()
