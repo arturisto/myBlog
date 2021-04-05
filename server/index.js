@@ -39,7 +39,7 @@ app.use("/", routes);
 const PORT = process.env.PORT || 5000;
 console.log("hi before test");
 app.listen(PORT, () => {
-  console.log("server on port 5000");
+  console.log("server on port ", PORT);
 });
-console.log("hi after test");
+console.log("hi after test", app);
 module.exports = app;
