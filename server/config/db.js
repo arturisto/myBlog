@@ -1,5 +1,9 @@
 const Sequelize = require("sequelize");
-console.log("hi db");
+console.log(
+  process.env["DATABASE_NAME"],
+  process.env["DATABASE_USERNAME"],
+  process.env["DATABASE_PASSWORD"]
+);
 const db = new Sequelize(
   process.env["DATABASE_NAME"],
   process.env["DATABASE_USERNAME"],
