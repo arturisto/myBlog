@@ -4,9 +4,7 @@ const cors = require("cors");
 const routes = require("./routes");
 const sess = require("express-session");
 //database
-console.log("hi before db");
 const db = require("./config/db");
-console.log("hi after db");
 // //testDB
 
 db.authenticate()
@@ -37,9 +35,7 @@ const jwt = require("jsonwebtoken");
 app.use("/", routes);
 
 const PORT = process.env.PORT || 5000;
-console.log("hi before test");
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("server on port ", PORT);
 });
-console.log("hi after test", app);
 module.exports = app;
