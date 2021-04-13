@@ -229,7 +229,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/signup", verifyJWT, async (req, res) => {
+//router.post("/signup", verifyJWT, async (req, res) => {
+router.post("/signup", async (req, res) => {
   const newUser = {
     name: req.body.name,
     username: req.body.username,

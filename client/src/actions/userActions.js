@@ -48,9 +48,9 @@ const signup = async (name, username, password) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-access-token": localStorage.getItem("token"),
+      // "x-access-token": localStorage.getItem("token"),
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ data: data }),
   });
 
   const newUser = await response.json();
@@ -106,7 +106,7 @@ const updateBlog = async (updatedEntry, title, blogId, tags, seoTags) => {
         "Content-Type": "application/json",
         "x-access-token": localStorage.getItem("token"),
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ data: data }),
     });
     return true;
   } catch (error) {
