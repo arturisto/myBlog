@@ -117,7 +117,7 @@ class Main extends Component {
             <WelcomeNav scorller={this.scollers} />
           </div>
 
-          {/* <div className="mainContentWrapper">
+          <div className="mainContentWrapper">
             <div className="subMainContentWrapper">
               <MiddleHeadline id="latest" text="כתבות אחרונות" />
               <Element name="latest" />
@@ -165,8 +165,8 @@ class Main extends Component {
               <Button variant="primary" size="lg">
                 More Destination
               </Button>
-            </div> 
-          </div> */}
+            </div>
+          </div>
         </div>
         <BackToTop onBackToTop={() => this.handleBackToTop()} />
       </div>
