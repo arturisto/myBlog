@@ -37,13 +37,14 @@ class LoginPage extends Component {
     return (
       <Fragment>
         <div className="auth-form">
-          {this.state.isLoggedIn ? (
+          <SignUp></SignUp>
+          {/* {this.state.isLoggedIn ? (
             <>
               <SignUp></SignUp>
             </>
           ) : (
             <Login onLogin={(status) => this.handleLogin(status)}></Login>
-          )}
+          )} */}
         </div>
       </Fragment>
     );
