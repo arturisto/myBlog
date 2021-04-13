@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const routes = require("./routes");
 const sess = require("express-session");
+const path = require("path");
 //database
 const db = require("./config/db");
 // //testDB
@@ -27,7 +28,9 @@ app.use(
 app.use((res, req, next) => {
   next();
 });
-
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+});
 //securities??
 const jwt = require("jsonwebtoken");
 //routes
