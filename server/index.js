@@ -28,10 +28,7 @@ app.use(
 app.use((res, req, next) => {
   next();
 });
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-});
-app.use(express.static(path.join(__dirname, "client/build")));
+
 //securities??
 const jwt = require("jsonwebtoken");
 //routes
@@ -41,5 +38,9 @@ app.use("/", routes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log("server on port ", PORT);
+});
+app.use(express.static(path.join(__dirname, "../", "client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../", "client", "build", "index.html"));
 });
 module.exports = app;
