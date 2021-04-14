@@ -43,7 +43,8 @@ const signup = async (name, username, password) => {
   };
   const baseUrl = getBaseUrl();
   const url = baseUrl + "user/signup";
-  console.log(data);
+  console.log("sign up", data);
+  console.log("url");
   const response = await fetch(url, {
     method: "POST",
     headers: {
