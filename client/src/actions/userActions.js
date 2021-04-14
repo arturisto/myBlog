@@ -44,7 +44,7 @@ const signup = async (name, username, password) => {
   const baseUrl = getBaseUrl();
   const url = baseUrl + "user/signup";
   console.log("sign up", data);
-  console.log("url");
+  console.log("url", url);
   const response = await fetch(url, {
     method: "POST",
     headers: {
@@ -55,9 +55,8 @@ const signup = async (name, username, password) => {
   });
 
   const newUser = await response.json();
-
+  console.log(newUser);
   if (newUser) {
-    console.log(newUser);
     return true;
   } else {
     return false;
