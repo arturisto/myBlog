@@ -42,6 +42,8 @@ const signup = async (name, username, password) => {
     password: password,
   };
   const baseUrl = getBaseUrl();
+  console.log("proc url:", process.env.NODE_ENV);
+  console.log("win origin: ", window.location.origin);
   const url = baseUrl + "user/signup";
   console.log("sign up  ", data);
   console.log("url", url);
