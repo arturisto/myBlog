@@ -36,7 +36,7 @@ const jwt = require("jsonwebtoken");
 app.use("/", routes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("server on port ", PORT);
 });
 app.use(express.static(path.join(__dirname, "../", "client/build")));
