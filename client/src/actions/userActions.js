@@ -8,7 +8,7 @@ const login = async (username, password) => {
       password: password,
     };
 
-    const baseUrl = getBaseUrl();
+    // const baseUrl = getBaseUrl();
     console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
     console.log("window.location.origin", window.location.origin);
     const url = window.location.origin + "/user/login";
