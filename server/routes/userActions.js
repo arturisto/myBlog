@@ -231,11 +231,13 @@ router.post("/login", async (req, res) => {
 
 //router.post("/signup", verifyJWT, async (req, res) => {
 router.post("/signup", async (req, res) => {
+  console.log("body: ", req.body);
   const newUser = {
     name: req.body.name,
     username: req.body.username,
     password: req.body.password,
   };
+  console.log("newuser:", newUser);
 
   bcrypt.genSalt(10, (err, salt) =>
     bcrypt.hash(newUser.password, salt, async (err, hash) => {
@@ -247,7 +249,7 @@ router.post("/signup", async (req, res) => {
           password: hash,
         });
       } catch (error) {
-        console.log(error);
+        console.log("create new user error:", error);
       }
 
       console.log(hash);
