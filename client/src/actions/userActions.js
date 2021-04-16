@@ -9,7 +9,10 @@ const login = async (username, password) => {
     };
 
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/login";
+    console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
+    console.log("window.location.origin", window.location.origin);
+    const url = window.location.origin + "/user/login";
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
