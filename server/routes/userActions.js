@@ -233,9 +233,9 @@ router.post("/login", async (req, res) => {
 router.post("/signup", async (req, res) => {
   console.log("body: ", req.body);
   const newUser = {
-    name: req.body.name,
-    username: req.body.username,
-    password: req.body.password,
+    name: req.body.data.name,
+    username: req.body.data.username,
+    password: req.body.data.password,
   };
   console.log("newuser:", newUser);
 
@@ -248,6 +248,7 @@ router.post("/signup", async (req, res) => {
           username: newUser.username,
           password: hash,
         });
+        return true;
       } catch (error) {
         console.log("create new user error:", error);
       }
