@@ -20,11 +20,11 @@ const router = express.Router();
 const verifyJWT = (req, res, next) => {
   const token = req.headers["x-access-token"];
   if (!token) {
-    res.status(403).json({ msg: "unautharized" });
+    res.status(403).json({ msg: "unauthorized" });
   } else {
     jwt.verify(token, process.env["JWT_SECRET"], (err, decoded) => {
       if (err) {
-        res.status(403).json({ msg: "unautharized " });
+        res.status(403).json({ msg: "unauthorized " });
       } else {
         req.userId = decoded.id;
         next();
@@ -56,9 +56,6 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
   const seoTags = req.body.seoTags;
 
   try {
-    // const tagIds = await createTagsPromiseAll(tags);
-    // console.log("tags", tags);
-    // console.log("ids", tagIds);
     const uplaodedImagesUrls = await imageUploader(blogTitle);
     uplaodedImagesUrls.forEach((image) => {
       if (image.status === "rejected") {
@@ -112,9 +109,14 @@ const createTagsPromiseAll = async (tags) => {
   return Promise.all(tags.map((tag) => createTag(tag)));
 };
 
+//TODO refactor creation of tags with error handling
 const createTag = async (tag) => {
-  const newTag = await Tags.create({ name: tag });
-  return newTag.dataValues.id;
+  try {
+    const newTag = await Tags.create({ name: tag });
+    return newTag.dataValues.id;
+  } catch {
+    return false;
+  }
 };
 router.post("/blogmanage/updateentry", verifyJWT, async (req, res) => {
   const blogId = req.body.id;
@@ -226,11 +228,12 @@ router.post("/login", async (req, res) => {
       });
   } catch (error) {
     console.log("error", error);
+    res.status(400).json({ msg: error });
   }
 });
 
-//router.post("/signup", verifyJWT, async (req, res) => {
-router.post("/signup", async (req, res) => {
+router.post("/signup", verifyJWT, async (req, res) => {
+  // router.post("/signup", async (req, res) => {
   console.log("body: ", req.body);
   const newUser = {
     name: req.body.data.name,
@@ -243,22 +246,18 @@ router.post("/signup", async (req, res) => {
     bcrypt.hash(newUser.password, salt, async (err, hash) => {
       if (err) throw err;
       try {
-        const response = await User.create({
+        await User.create({
           name: newUser.name,
           username: newUser.username,
           password: hash,
         });
-        return true;
+        return res.status(200).json({ signup: true });
       } catch (error) {
         console.log("create new user error:", error);
+        return res.status(400).json({ signup: error });
       }
-
-      console.log(hash);
     })
   );
-
-  //ELSE statement ends here
-
   return false;
 });
 

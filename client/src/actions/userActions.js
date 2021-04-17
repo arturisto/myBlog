@@ -10,7 +10,7 @@ const login = async (username, password) => {
 
     const baseUrl = getBaseUrl();
 
-    const url = window.location.origin + "/user/login";
+    const url = baseUrl + "/user/login";
 
     const response = await fetch(url, {
       method: "POST",
@@ -29,14 +29,14 @@ const login = async (username, password) => {
       if (localStorage.getItem("token")) {
         localStorage.removeItem("token");
       }
-
+      console.log(token.msg);
       return false;
     }
   } catch (err) {
     console.log("error: ", err);
+    return false;
   }
 };
-
 const signup = async (name, username, password) => {
   const data = {
     name: name,
@@ -44,14 +44,12 @@ const signup = async (name, username, password) => {
     password: password,
   };
   const baseUrl = getBaseUrl();
-  console.log("process.env.NODE_ENV:", process.env.NODE_ENV);
-  console.log("window.location.origin", window.location.origin);
-  const url = window.location.origin + "/user/signup";
+  const url = baseUrl + "/user/signup";
   const response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // "x-access-token": localStorage.getItem("token"),
+      "x-access-token": localStorage.getItem("token"),
     },
     body: JSON.stringify({ data: data }),
   });
@@ -73,7 +71,7 @@ const saveBlog = async (newEntry, title, tags, seoTags) => {
       seoTags: seoTags,
     };
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/savenewentry";
+    const url = baseUrl + "/user/blogmanage/savenewentry";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -83,7 +81,9 @@ const saveBlog = async (newEntry, title, tags, seoTags) => {
       body: JSON.stringify(data),
     });
     console.log("response: ", response);
-    return true;
+
+    if (response.signup) return true;
+    else return false;
   } catch (err) {
     console.log("error: ", err);
     return err;
@@ -100,7 +100,7 @@ const updateBlog = async (updatedEntry, title, blogId, tags, seoTags) => {
       seoTags: seoTags,
     };
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/updateentry";
+    const url = baseUrl + "/user/blogmanage/updateentry";
 
     await fetch(url, {
       method: "POST",
@@ -120,7 +120,7 @@ const updateBlog = async (updatedEntry, title, blogId, tags, seoTags) => {
 const getSingleBlogEntry = async (entryId) => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/getnewentry?blogId=" + entryId;
+    const url = baseUrl + "/user/blogmanage/getnewentry?blogId=" + entryId;
 
     const result = await fetch(url, {
       method: "GET",
@@ -145,7 +145,7 @@ const uploadImageToServer = async (formData) => {
   };
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/uploadimage";
+    const url = baseUrl + "/user/blogmanage/uploadimage";
     return axios.post(url, formData, config).then((res) => res.data.imageUrl);
   } catch (error) {
     console.log(error);
@@ -161,7 +161,7 @@ const getBlogPostHeaders = async () => {
   };
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/getAllPosts";
+    const url = baseUrl + "/user/blogmanage/getAllPosts";
     const resp = await axios.get(url, config);
     return resp.data;
   } catch (error) {
@@ -172,7 +172,7 @@ const getBlogPostHeaders = async () => {
 const deleteEntries = async (blogIds) => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/deleteEntries";
+    const url = baseUrl + "/user/blogmanage/deleteEntries";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -191,7 +191,7 @@ const deleteEntries = async (blogIds) => {
 const publishEntries = async (blogIds) => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/publishEntries";
+    const url = baseUrl + "/user/blogmanage/publishEntries";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -210,7 +210,7 @@ const publishEntries = async (blogIds) => {
 const unPublishEntries = async (blogIds) => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/unPublishEntries";
+    const url = baseUrl + "/user/blogmanage/unPublishEntries";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -232,7 +232,7 @@ const isLogin = async () => {
 
   if (token) {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/isLogin";
+    const url = baseUrl + "/user/isLogin";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -250,7 +250,7 @@ const isLogin = async () => {
 const getAllTags = async () => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/getAllTags";
+    const url = baseUrl + "/user/blogmanage/getAllTags";
     const reply = await fetch(url, {
       method: "get",
       headers: {
@@ -274,7 +274,7 @@ const saveNewTag = async (tag) => {
   const token = localStorage.getItem("token");
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/saveNewTag";
+    const url = baseUrl + "/user/blogmanage/saveNewTag";
     const reply = await fetch(url, {
       method: "POST",
       headers: {
@@ -294,7 +294,7 @@ const deleteTag = async (tags) => {
   try {
     console.log(tags);
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "user/blogmanage/deleteTag";
+    const url = baseUrl + "/user/blogmanage/deleteTag";
     const token = localStorage.getItem("token");
 
     const reply = await fetch(url, {

@@ -3,8 +3,7 @@ import { getBaseUrl } from "./utils";
 
 const getLatestBlogs = async () => {
   const baseUrl = getBaseUrl();
-  const url = baseUrl + "blog/getlatest";
-
+  const url = baseUrl + "/blog/getlatest";
   const config = {
     headers: {
       "content-type": "application/json",
@@ -22,8 +21,7 @@ const getLatestBlogs = async () => {
 
 const getEntriesByType = async (type, pageNumber, tags) => {
   const baseUrl = getBaseUrl();
-  const url = baseUrl + "blog/getEntriesByType";
-
+  const url = baseUrl + "/blog/getEntriesByType";
   const config = {
     headers: {
       "content-type": "application/json",
@@ -47,7 +45,7 @@ const getEntriesByType = async (type, pageNumber, tags) => {
 const getSingleBlogEntry = async (entryId) => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "blog/getnewentry?blogId=" + entryId;
+    const url = baseUrl + "/blog/getnewentry?blogId=" + entryId;
 
     const result = await fetch(url, {
       method: "GET",
@@ -66,7 +64,7 @@ const getSingleBlogEntry = async (entryId) => {
 const subscribe = async (email) => {
   try {
     const baseUrl = getBaseUrl();
-    const url = baseUrl + "blog/subscribe";
+    const url = baseUrl + "/blog/subscribe";
     const response = await fetch(url, {
       method: "POST",
       headers: {

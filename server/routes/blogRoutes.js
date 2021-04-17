@@ -36,9 +36,10 @@ router.get("/getlatest", async (req, res) => {
       order: [["publishedAt", "DESC"]],
     });
     const blogEntiresWithPreviewURLs = getPreviewImageUrl(blogEntries);
-    res.status(200).json({ posts: blogEntiresWithPreviewURLs });
+    return res.status(200).json({ posts: blogEntiresWithPreviewURLs });
   } catch (error) {
     console.log(error);
+    return res.status(400).json({ msg: error });
   }
 });
 
@@ -54,7 +55,6 @@ router.post("/getEntriesByType", async (req, res) => {
       where: { entryType: entrieType },
       order: [["publishedAt", "DESC"]],
     });
-    console.log("**********************************");
     const blogEntries = tags
       ? filterByTags(tags, entriesToFilter)
       : entriesToFilter;
@@ -66,12 +66,14 @@ router.post("/getEntriesByType", async (req, res) => {
     const blogEntiresWithPreviewURLs = getPreviewImageUrl(reducedBlogEntries);
     const maxEntries = blogEntries.length;
 
-    res
-      .status(200)
-      .json({ entries: blogEntiresWithPreviewURLs, maxEntries: maxEntries });
+    res.status(200).json({
+      msg: "ok",
+      entries: blogEntiresWithPreviewURLs,
+      maxEntries: maxEntries,
+    });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ err: error });
+    res.status(404).json({ msg: error });
   }
 });
 
@@ -82,7 +84,7 @@ router.get("/getnewentry", async (req, res) => {
     res.status(200).json({ msg: "success", body: blogEntry });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ err: error });
+    res.status(404).json({ msg: error });
   }
 });
 
@@ -95,7 +97,7 @@ router.post("/subscribe", async (req, res) => {
     res.status(200).json({ msg: "ok" });
   } catch (error) {
     console.log("error", error);
-    res.status(403).json({ err: error });
+    res.status(403).json({ msg: error });
   }
 });
 

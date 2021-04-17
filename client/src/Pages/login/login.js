@@ -18,6 +18,7 @@ class LoginPage extends Component {
       isLoggedIn: false,
     };
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleSignup = this.handleSignup.bind(this);
   }
 
   handleLogin(status) {
@@ -32,19 +33,21 @@ class LoginPage extends Component {
       alert("error logging in");
     }
   }
+  handleSignup(status) {
+    status ? alert("user created successfully") : alert("error creating user");
+  }
 
   render() {
     return (
       <Fragment>
         <div className="auth-form">
-          <SignUp></SignUp>
-          {/* {this.state.isLoggedIn ? (
+          {this.state.isLoggedIn ? (
             <>
-              <SignUp></SignUp>
+              <SignUp onSignup={(status) => this.handleSignup(status)}></SignUp>
             </>
           ) : (
             <Login onLogin={(status) => this.handleLogin(status)}></Login>
-          )} */}
+          )}
         </div>
       </Fragment>
     );

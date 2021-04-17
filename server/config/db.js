@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+
 console.log(
   process.env["DATABASE_NAME"],
   process.env["DATABASE_USERNAME"],
@@ -20,10 +21,10 @@ const db = new Sequelize(
       idle: 10000,
     },
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
+      // ssl: {
+      //   require: false,
+      //   rejectUnauthorized: false,
+      // },
     },
   }
 );

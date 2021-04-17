@@ -4,12 +4,15 @@ import "./CardTrio.scss";
 
 export default function CardTrio(props) {
   const blogPosts = props.data;
+  console.log("posts", blogPosts);
   return (
     <Fragment>
       <div className="cardTrio">
-        {blogPosts.map(function (item, i) {
-          return <Card blogData={item}></Card>;
-        })}
+        {blogPosts
+          ? blogPosts.map(function (item, i) {
+              return <Card blogData={item} key={i}></Card>;
+            })
+          : false}
       </div>
     </Fragment>
   );

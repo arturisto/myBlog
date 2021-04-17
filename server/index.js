@@ -1,9 +1,11 @@
 const express = require("express");
+require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const routes = require("./routes");
 const sess = require("express-session");
 const path = require("path");
+
 //database
 const db = require("./config/db");
 // //testDB
