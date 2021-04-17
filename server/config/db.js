@@ -7,8 +7,10 @@ console.log(
   process.env["DATABASE_HOST"]
 );
 const ssl = {
-  require: true,
-  rejectUnauthorized: false,
+  ssl: {
+    require: true,
+    rejectUnauthorized: false,
+  },
 };
 const options = process.env["NODE_ENV"] === "DEV" ? {} : ssl;
 console.log(options);
