@@ -28,7 +28,7 @@ const db = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    dialectOptions: { options },
+    dialectOptions: options,
   }
 );
 
