@@ -117,8 +117,8 @@ class Main extends Component {
           <div className="mainIntroWrapper">
             <WelcomeNav scorller={this.scollers} />
           </div>
-
-          <div className="mainContentWrapper">
+          <div>hello amplify</div>
+          {/* <div className="mainContentWrapper">
             <div className="subMainContentWrapper">
               <MiddleHeadline id="latest" text="כתבות אחרונות" />
               <Element name="latest" />
@@ -167,7 +167,7 @@ class Main extends Component {
                 More Destination
               </Button>
             </div>
-          </div>
+          </div> */}
         </div>
         <BackToTop onBackToTop={() => this.handleBackToTop()} />
       </div>
