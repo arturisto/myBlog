@@ -1,0 +1,2 @@
+(this["webpackJsonpmr-mrs-app"]=this["webpackJsonpmr-mrs-app"]||[]).push([[14],{337:function(t,e,n){"use strict";n.r(e),n.d(e,"default",(function(){return i}));var c=n(1),s=n(0);function i(){return Object(c.jsx)(s.Fragment,{children:Object(c.jsx)("div",{className:"col",children:Object(c.jsx)("div",{style:{maxHeight:"50%",maxWidth:"100%"},children:Object(c.jsx)("img",{style:{maxHeight:"50%",maxWidth:"50%"},src:"/maintenance.png",alt:"under construction"})})})})}}}]);
+//# sourceMappingURL=14.51d63ee4.chunk.js.map

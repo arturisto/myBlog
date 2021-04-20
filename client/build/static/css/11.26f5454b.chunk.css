@@ -1,0 +1,2 @@
+.container-row{display:flex;flex-direction:row}.nav-pane{display:flex;flex-direction:column;padding-left:1rem;padding-right:1rem;background-color:#f8f8ff;border:1px solid #d3d3d3;height:100%}.nav-pane button{margin-top:15px}.tab-pane{width:100%}.tags-main{width:50%;overflow:auto;margin:25px auto 10px}.tag-button{margin:2px!important;border-radius:20%!important}@media (max-width:1024px){.tags-main{width:100%}}.toolbarWrapper{margin:1rem;display:flex;flex-direction:row;align-items:center}
+/*# sourceMappingURL=11.26f5454b.chunk.css.map */

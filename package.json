@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start-client": "react-scripts start",
-    "build": "react-scripts build && (cd server && npm install)",
+    "build": "cd client && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "cd server && npm install && node index.js",
