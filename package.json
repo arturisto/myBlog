@@ -29,7 +29,8 @@
   },
   "scripts": {
     "start-client": "react-scripts start",
-    "build": "cd client && npm run build",
+    "build-backend": "cd server && npm run start",
+    "build-frontend": "cd client && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "cd server && npm install && node index.js",
