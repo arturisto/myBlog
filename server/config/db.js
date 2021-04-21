@@ -7,10 +7,7 @@ console.log(
   process.env["DATABASE_HOST"]
 );
 const ssl = {
-  ssl: {
-    require: true,
-    rejectUnauthorized: false,
-  },
+  ssl: "Amazon RDS",
 };
 const options = process.env["NODE_ENV"] === "DEV" ? {} : ssl;
 console.log(options);
@@ -22,6 +19,7 @@ const db = new Sequelize(
     host: process.env["DATABASE_HOST"],
     dialect: "postgres",
     protocol: "postgres",
+    logging: console.log,
     pool: {
       max: 5,
       min: 0,
