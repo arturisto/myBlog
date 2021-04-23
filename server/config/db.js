@@ -19,6 +19,7 @@ const db = new Sequelize(
     dialect: "postgres",
     protocol: "postgres",
     logging: console.log,
+    timeout: 6000,
     pool: {
       max: 5,
       min: 0,
