@@ -10,7 +10,6 @@ const ssl = {
   ssl: "Amazon RDS",
 };
 const options = process.env["NODE_ENV"] === "DEV" ? {} : ssl;
-console.log(options);
 const db = new Sequelize(
   process.env["DATABASE_NAME"],
   process.env["DATABASE_USERNAME"],
@@ -30,5 +29,4 @@ const db = new Sequelize(
   }
 );
 
-console.log(db);
 module.exports = db;
