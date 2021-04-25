@@ -4,13 +4,6 @@ import logo from "../../assets/images/logo.jpg";
 import "./navbar.scss";
 import { SocialIcon } from "react-social-icons";
 
-const navbar_items = [
-  ["צור קשר", "#"],
-  ["מי אנחנו", "#"],
-  ["מתכונים", "/construction"],
-  ['בחו"ל', "/local"],
-  ["בארץ", "/local"],
-];
 const dropdown_data = [
   ["תל אביב", "#"],
   ["מרכז", "#"],
@@ -62,7 +55,12 @@ export default function NavigationBar() {
           className="collapse navbar-collapse mobileBackground"
           id="navbarNavAltMarkup"
         >
-          <div className="navbar-nav ml-auto">
+          {/* <div className="navbar-nav ml-auto"> */}
+          <div
+            className={`navbar-nav ml-auto ${
+              isMobileBackgroundDIv ? "flex-column-reverse" : ""
+            }`}
+          >
             <a className="nav-item nav-link active" href="#">
               צור קשר
             </a>
