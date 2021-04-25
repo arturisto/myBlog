@@ -4,8 +4,7 @@ console.log(
   process.env["DATABASE_NAME"],
   process.env["DATABASE_USERNAME"],
   process.env["DATABASE_PASSWORD"],
-  process.env["DATABASE_HOST"],
-  process.env["PGSSLMODE"]
+  process.env["DATABASE_HOST"]
 );
 const ssl = {
   ssl: "Amazon RDS",
@@ -28,7 +27,6 @@ const db = new Sequelize(
       acquire: 30000,
       idle: 10000,
     },
-    dialectOptions: options,
   }
 );
 
