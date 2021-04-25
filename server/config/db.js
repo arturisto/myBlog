@@ -8,7 +8,7 @@ console.log(
   process.env["PGSSLMODE"]
 );
 const ssl = {
-  ssl: process.env["PGSSLMODE"],
+  ssl: "Amazon RDS",
 };
 const options = process.env["NODE_ENV"] === "DEV" ? {} : ssl;
 console.log(options);

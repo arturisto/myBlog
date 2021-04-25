@@ -4,6 +4,13 @@ import logo from "../../assets/images/logo.jpg";
 import "./navbar.scss";
 import { SocialIcon } from "react-social-icons";
 
+const navbar_items = [
+  ["צור קשר", "#"],
+  ["מי אנחנו", "#"],
+  ["מתכונים", "/construction"],
+  ['בחו"ל', "/local"],
+  ["בארץ", "/local"],
+];
 const dropdown_data = [
   ["תל אביב", "#"],
   ["מרכז", "#"],
@@ -12,10 +19,8 @@ const dropdown_data = [
 ];
 
 export default function NavigationBar() {
-  const [isMobileBackgroundDIv, setMobileBackgroundDIv] = useState(
-    window.innerWidth < 1024 ? true : false
-  );
-  console.log(window.innerWidth, isMobileBackgroundDIv);
+  const [isMobileBackgroundDIv, setMobileBackgroundDIv] = useState(false);
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -47,7 +52,10 @@ export default function NavigationBar() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span
+            className="navbar-toggler-icon"
+            onClick={() => setMobileBackgroundDIv(!isMobileBackgroundDIv)}
+          ></span>
         </button>
 
         <div
