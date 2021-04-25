@@ -15,6 +15,7 @@ export default function NavigationBar() {
   const [isMobileBackgroundDIv, setMobileBackgroundDIv] = useState(
     window.innerWidth < 1024 ? true : false
   );
+  console.log(window.innerWidth, isMobileBackgroundDIv);
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -72,7 +73,7 @@ export default function NavigationBar() {
           </div>
         </div>
       </nav>
-      {setMobileBackgroundDIv ? (
+      {isMobileBackgroundDIv ? (
         <div className="mobile-background-dv"></div>
       ) : (
         <></>

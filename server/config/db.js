@@ -7,7 +7,7 @@ console.log(
   process.env["DATABASE_HOST"]
 );
 const ssl = {
-  ssl: true,
+  ssl: "Amazon RDS",
 };
 const options = process.env["NODE_ENV"] === "DEV" ? {} : ssl;
 const db = new Sequelize(
