@@ -17,7 +17,7 @@ const db = new Sequelize(
   process.env["DATABASE_PASSWORD"],
   {
     host: process.env["DATABASE_HOST"],
-    dialect: "postgres",
+    dialect: "mysql",
     protocol: "postgres",
     logging: console.log,
     timeout: 6000,
