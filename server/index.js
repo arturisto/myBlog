@@ -7,11 +7,11 @@ const sess = require("express-session");
 const path = require("path");
 
 //database
-const db = require("./config/db");
-// //testDB
-db.authenticate()
-  .then(() => console.log("database connected"))
-  .catch((err) => console.log("Error ", err));
+// const db = require("./config/db");
+// // //testDB
+// db.authenticate()
+//   .then(() => console.log("database connected"))
+//   .catch((err) => console.log("Error ", err));
 
 //middleware
 
