@@ -22,12 +22,15 @@ const db = new Sequelize(
     logging: console.log,
     timeout: 6000,
     pool: {
-      max: 5,
+      max: 15,
       min: 0,
       acquire: 30000,
       idle: 10000,
     },
-    dialectOptions: options,
+    dialectOptions: {
+      ssl: "Amazon RDS",
+      onnectTimeout: 60000,
+    },
   }
 );
 
