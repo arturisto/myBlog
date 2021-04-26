@@ -6,10 +6,12 @@ const routes = require("./routes");
 const sess = require("express-session");
 const path = require("path");
 
+console.log("pre db");
 //database
 const db = require("./config/db");
 // //testDB
 
+console.log("post db");
 db.authenticate()
   .then(() => console.log("database connected"))
   .catch((err) => console.log("Error ", err));
