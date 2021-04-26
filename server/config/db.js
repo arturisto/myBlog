@@ -28,7 +28,7 @@ const db = new Sequelize(
       idle: 10000,
     },
     dialectOptions: {
-      ssl: "rds-ca-2019",
+      ssl: true,
     },
   }
 );
