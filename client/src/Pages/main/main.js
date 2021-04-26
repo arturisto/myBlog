@@ -87,13 +87,13 @@ class Main extends Component {
 
   async componentDidMount() {
     console.log("try to load on main");
-    const latestBlogs = await getLatestBlogs();
-    console.log(latestBlogs);
-    this.setState({
-      latestBlogs: latestBlogs,
-      isLatestLoading: false,
-    });
-  }
+  //   const latestBlogs = await getLatestBlogs();
+  //   console.log(latestBlogs);
+  //   this.setState({
+  //     latestBlogs: latestBlogs,
+  //     isLatestLoading: false,
+  //   });
+  // }
 
   handleRoute(link) {
     this.props.history.push(link);

@@ -6,12 +6,9 @@ const routes = require("./routes");
 const sess = require("express-session");
 const path = require("path");
 
-console.log("pre db");
 //database
 const db = require("./config/db");
 // //testDB
-
-console.log("post db");
 db.authenticate()
   .then(() => console.log("database connected"))
   .catch((err) => console.log("Error ", err));
@@ -47,4 +44,5 @@ app.listen(PORT, "0.0.0.0", () => {
 // app.get("*", (req, res) => {
 //   res.sendFile(path.resolve(__dirname, "../", "client", "build", "index.html"));
 // });
+
 module.exports = app;
