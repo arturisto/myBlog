@@ -12,9 +12,12 @@ const dropdown_data = [
 ];
 
 export default function NavigationBar() {
-  const [isMobileBackgroundDIv, setMobileBackgroundDIv] = useState(
-    window.innerWidth < 1024 ? true : false
-  );
+  const [isMobileBackgroundDIv, setMobileBackgroundDIv] = useState(false);
+
+  const closeNavbar = ()=> {
+    setMobileBackgroundDIv(!isMobileBackgroundDIv);
+    document.getElementById("navbarNavAltMarkup").classList.remove("show");
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -45,7 +48,7 @@ export default function NavigationBar() {
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
           aria-label="Toggle navigation"
-          onClick={}
+          onClick={()=>setMobileBackgroundDIv(!isMobileBackgroundDIv)}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -53,6 +56,7 @@ export default function NavigationBar() {
         <div
           className="collapse navbar-collapse mobileBackground"
           id="navbarNavAltMarkup"
+          onClick = {()=> closeNavbar(this)}
         >
           <div className="navbar-nav ml-auto">
             <a className="nav-item nav-link active" href="#">
@@ -73,8 +77,8 @@ export default function NavigationBar() {
           </div>
         </div>
       </nav>
-      {setMobileBackgroundDIv ? (
-        <div className="mobile-background-dv"></div>
+      {isMobileBackgroundDIv ? (
+        <div className="mobile-background-dv" onClick={()=>closeNavbar()}></div>   
       ) : (
         <></>
       )}
