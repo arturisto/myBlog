@@ -45,6 +45,7 @@ export default function NavigationBar() {
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          onClick={}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
