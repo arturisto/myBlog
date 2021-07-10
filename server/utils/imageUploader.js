@@ -62,7 +62,7 @@ function uploadImages (file, title){
              })
          .catch(error => {
              reject(error);
-         })   ; 
+         }); 
     });
     
     
