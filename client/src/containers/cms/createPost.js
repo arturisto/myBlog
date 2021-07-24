@@ -14,6 +14,7 @@ export default function CreatePost(props) {
 
   const editorValue = props.editorValue
   const imageHandler = (quill) => {
+    console.log("fire");
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
@@ -22,19 +23,16 @@ export default function CreatePost(props) {
       const file = input.files[0];
       const formData = new FormData();
       formData.append("image", file);
-      console.log(input.files[0]);
+      console.log("input" + input.files[0]);
       // Save current cursor state
       const range = quill.getEditor().getSelection(true);
       // // Move cursor to right side of image (easier to continue typing)
       quill.getEditor().setSelection(range.index + 1);
       // const img = await uploadImageToBucket(this.state.uploadedPictures, this.state.title)
-      let reader = new FileReader();
-      reader.readAsDataURL(input.files[0])
-      console.log(reader.result);
       // let reader = readAsDataURL(file);
       let img = await uploadImageToServer(formData);
-
-      quill.getEditor().insertEmbed(range.index, "image", reader.result);
+      console.log("img" + img);
+      quill.getEditor().insertEmbed(range.index, "image",img);
     };
   };
 

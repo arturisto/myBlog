@@ -35,6 +35,7 @@ const imageReplacer = async (title)=> {
 };
 //uploading proccess
 function uploadImages (file, title){
+    console.log("start image upload: " + title);
     const bucketName = process.env['BUCKET_NAME'];
     const trimedTitle =  title.replace(/\s/g, '');
     const s3fsImpl = new S3FS(bucketName, {
@@ -42,7 +43,8 @@ function uploadImages (file, title){
         secretAccessKey: process.env["AWS_SECRET_KEY"],
         region: process.env['AWS_REGION'],
     });  
-
+    console.log(process.env["AWS_ACCESS_KEY_ID"])
+    console.log("create connection to bucket");
     let filePath = tempFolder+"\\"+file;
     let stream = fs.createReadStream(filePath);
     //local path inside S3 bucket
@@ -58,9 +60,11 @@ function uploadImages (file, title){
         .then(function (res) {
              let newUrl =  bucketUrl+trimedTitle+"/"+file; 
              let oldPath =localHostPath+file;
+             console.log("image uploaded: " + newUrl);
              resolve([oldPath,newUrl])  ;
              })
          .catch(error => {
+             console.log("upload aws error: "+error);
              reject(error);
          }); 
     });

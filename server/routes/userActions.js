@@ -57,9 +57,10 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
 
   try {
     const uplaodedImagesUrls = await imageUploader(blogTitle);
+    console.log("res: "+ uplaodedImagesUrls)
     uplaodedImagesUrls.forEach((image) => {
       if (image.status === "rejected") {
-        //if one item is erroneous fail the entire proccss and return the error
+        //if one item is erroneous fail the entire process and return the error
         const reason = image.reason.code;
         const statusCode = image.reason.statusCode;
         return res.status(statusCode).json({ msg: reason });
@@ -70,6 +71,7 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
     uplaodedImagesUrls.forEach((urlItem) => {
       const oldUrl = urlItem.value[0];
       const newUrl = urlItem.value[1];
+      console.log("urls: " + oldUrl + newUrl)
       newEntry = newEntry.replace(oldUrl, newUrl);
     });
 
@@ -79,7 +81,7 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
       title: blogTitle,
       metatitle: "meta",
       content: newEntry,
-      createdAt: new Date(),
+      // createdAt: new Date(),
       tags: tags,
       seoTags: seoTags,
     });
@@ -100,8 +102,8 @@ router.post("/blogmanage/savenewentry", verifyJWT, async (req, res) => {
 
     return res.status(200).json({ msg: "ok" });
   } catch (error) {
-    res.status(404).json({ msg: error });
     console.log("error", error);
+    res.status(404).json({ msg: error });
   }
 });
 
